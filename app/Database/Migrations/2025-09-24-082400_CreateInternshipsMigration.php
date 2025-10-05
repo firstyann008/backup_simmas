@@ -11,8 +11,10 @@ class CreateInternshipsMigration extends Migration
         $this->forge->dropTable('magang', true);
         $this->forge->addField([
             'id' => [
-                'type' => 'SERIAL',
-                'null' => false,
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+                'auto_increment' => true,
             ],
             'siswa_id' => [
                 'type' => 'INT',

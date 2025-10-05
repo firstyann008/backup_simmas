@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class SettingsModel extends Model
 {
-    protected $table = 'school_settings';
+    protected $table = 'settings';
     protected $primaryKey = 'id';
     protected $useAutoIncrement = true;
     protected $returnType = 'array';

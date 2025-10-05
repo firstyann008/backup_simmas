@@ -7,12 +7,23 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root {
+      --brand-600: #1e7e71;
+      --brand-700: #18665c;
+      --brand-50: #e6f4f3;
+      --bg-surface: #f7faf9;
+      --text-primary: #0f2e2c;
+      --text-secondary: #5c6f6d;
+      --border-color: #d7e3e1;
+      --sidebar-width: 280px;
+    }
+
     * {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     
     body {
-      background-color: #f8f9fa;
+      background-color: var(--bg-surface);
       min-height: 100vh;
       margin: 0;
       padding: 0;
@@ -26,19 +37,24 @@
       position: relative !important;
       z-index: 1000 !important;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: var(--bg-surface);
     }
+
+    /* Ensure navbar sits to the right of fixed-width sidebar */
+    .siswa-navbar { margin-left: var(--sidebar-width); }
+    @media (max-width: 768px) { .siswa-navbar { margin-left: 0; } }
     
     
     .main-container {
-      background: white;
+      background: var(--bg-surface);
       min-height: 100vh;
       margin: 0;
       padding: 0;
     }
     
     .glass-card {
-      background: white;
-      border: 1px solid #e9ecef;
+      background: #fff;
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
@@ -49,9 +65,9 @@
     }
     
     .stat-card {
-      background: white;
+      background: #fff;
       color: #333;
-      border: 1px solid #e9ecef;
+      border: 1px solid var(--border-color);
       border-radius: 8px;
       padding: 1.5rem;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -72,14 +88,22 @@
       background: white;
       color: #333;
       border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 2rem;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
     }
     
     .content-section {
       display: none !important;
       animation: fadeIn 0.5s ease-in-out;
     }
+    /* Hilangkan jarak atas pada section dan judul pertama */
+    .content-section { margin-top: 0; padding-top: 0; }
+    .content-section > h1, .content-section > h2, .content-section > h3, .content-section > h4,
+    .content-section > .h1, .content-section > .h2, .content-section > .h3, .content-section > .h4 {
+      margin-top: 0;
+    }
+    /* Spacer khusus untuk greeting agar tidak tertutup navbar */
+    #greet-block { padding-top: 110px; }
     
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -209,81 +233,237 @@
       opacity: 1 !important;
       visibility: visible !important;
     }
+    
+    /* Modern Logbook Styling */
+    .logbook-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    
+    .modern-search .input-group-text {
+      border-right: none;
+    }
+    
+    .modern-search .form-control:focus {
+      border-color: #28a745;
+      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    
+    .modern-table {
+      border-radius: 0;
+    }
+    
+    .modern-table thead th {
+      background-color: rgba(40, 167, 69, 0.1) !important;
+      border-bottom: 2px solid rgba(40, 167, 69, 0.2);
+      padding: 1rem 0.75rem;
+    }
+    
+    .modern-table tbody tr {
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .modern-table tbody tr:hover {
+      background-color: rgba(40, 167, 69, 0.05);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modern-table tbody td {
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+    }
+    
+    .table-opacity-10 {
+      background-color: rgba(40, 167, 69, 0.1) !important;
+    }
+    
+    .logbook-date-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    
+    .logbook-content {
+      max-width: 300px;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .logbook-feedback {
+      max-width: 200px;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .logbook-content .fw-semibold {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+    
+    .logbook-feedback .small {
+      line-height: 1.4;
+    }
+    
+    /* Fix text overflow in table cells */
+    .modern-table td {
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      max-width: 0;
+    }
+    
+    /* Specific column widths to prevent overflow */
+    .modern-table td:nth-child(1) { /* Tanggal */
+      width: 15%;
+      min-width: 150px;
+    }
+    
+    .modern-table td:nth-child(2) { /* Kegiatan & Kendala */
+      width: 40%;
+      min-width: 300px;
+      max-width: 400px;
+    }
+    
+    .modern-table td:nth-child(3) { /* Status */
+      width: 15%;
+      min-width: 120px;
+    }
+    
+    .modern-table td:nth-child(4) { /* Feedback Guru */
+      width: 20%;
+      min-width: 150px;
+      max-width: 200px;
+    }
+    
+    .modern-table td:nth-child(5) { /* Aksi */
+      width: 10%;
+      min-width: 100px;
+    }
+    
+    /* Ensure text doesn't overflow in content areas */
+    .logbook-content .text-dark {
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      line-height: 1.4;
+    }
+    
+    .logbook-feedback .small {
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    
+    /* Ensure table is responsive and doesn't overflow */
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .modern-table {
+      table-layout: fixed;
+      width: 100%;
+      min-width: 800px;
+    }
+    
+    /* Additional overflow protection */
+    .modern-table td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    /* But allow normal wrapping for content cells */
+    .modern-table td:nth-child(2),
+    .modern-table td:nth-child(4) {
+      overflow: visible;
+      text-overflow: initial;
+    }
+    
+    /* Limit width of logbook section for consistent sidebar */
+    #sec-logbook .container-fluid {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* Ensure consistent layout across all sections */
+    .content-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <div class="container-fluid">
-      <!-- School Info -->
-      <div class="d-flex align-items-center">
-        <div>
-          <h5 class="mb-0 fw-bold text-primary" id="navbar-school-name">SMK Negeri 1 Surabaya</h5>
-          <small class="text-muted">Sistem Manajemen Magang Siswa</small>
-        </div>
-      </div>
-      
-      <!-- User Info with Dropdown -->
-      <div class="dropdown">
-        <div class="d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-          <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 35px; height: 35px;">
-            <i class="fas fa-user text-white"></i>
-          </div>
-          <div>
-            <div class="fw-bold" id="navbar-user-name">Loading...</div>
-            <small class="text-muted">Siswa</small>
-          </div>
-        </div>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><h6 class="dropdown-header">Menu Akun</h6></li>
-          <li><a class="dropdown-item" href="#" onclick="showProfile()"><i class="fas fa-user me-2"></i>Profil</a></li>
-          <li><a class="dropdown-item" href="#" onclick="showSettings()"><i class="fas fa-cog me-2"></i>Pengaturan</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
   <div class="d-flex" style="min-height: calc(100vh - 56px);">
     <?= view('components/sidebar', ['user' => $user]) ?>
-
-    <main class="flex-grow-1">
-      <div class="container-fluid py-4">
+    <div class="flex-grow-1 d-flex flex-column">
+      <?= view('components/navbar', ['user' => $user]) ?>
+      <main class="flex-grow-1">
+      <div class="container-fluid py-0" style="margin-top: -75px;">
 
         <!-- Dashboard Section -->
-        <section id="sec-dashboard" class="content-section" data-section>
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-12">
-                <div class="text-center py-5">
-                  <h2 class="fw-bold text-dark mb-0" id="greet">Selamat datang, <?= $user['name'] ?? 'Siswa' ?>!</h2>
-                </div>
-              </div>
-            </div>
+        <section id="sec-dashboard" class="content-section" data-section style="display: block;">
+          <div id="greet-block" class="text-center">
+            <h2 class="fw-bold text-dark mb-0" id="greet">Selamat datang, <?= $user['name'] ?? 'Siswa' ?>!</h2>
           </div>
         </section>
 
         <!-- DUDI Section -->
         <section id="sec-dudi" class="content-section" data-section style="display: none;">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="input-group" style="max-width:420px;">
+          <style>
+            .dudi-card { background:#fff; border:1px solid var(--border-color); border-radius:14px; box-shadow:0 6px 16px rgba(0,0,0,.06); transition:.2s ease; overflow:hidden; }
+            .dudi-card:hover { transform: translateY(-3px); box-shadow:0 12px 24px rgba(0,0,0,.08); }
+            .dudi-card .head { display:flex; align-items:center; gap:.75rem; padding:1rem 1.25rem; border-bottom:1px dashed var(--border-color); }
+            .dudi-card .logo { width:40px; height:40px; border-radius:10px; background: var(--brand-50); display:grid; place-content:center; color: var(--brand-600); }
+            .dudi-card .title { font-weight:700; color:var(--text-primary); }
+            .dudi-card .meta { padding: .75rem 1.25rem 0; color: var(--text-secondary); font-size:.95rem; }
+            .dudi-card .progress { height:8px; background:#e9ecef; margin: .5rem 1.25rem; border-radius:6px; overflow:hidden; }
+            .dudi-card .progress-bar { background: var(--brand-600); }
+            .dudi-card .foot { display:flex; justify-content:space-between; align-items:center; padding: .75rem 1.25rem 1.25rem; }
+            .btn-dudi { background: var(--brand-600); border-color: var(--brand-600); }
+            .btn-dudi:hover { background: var(--brand-700); border-color: var(--brand-700); }
+            .search-dudi .form-control { border-color: var(--border-color); }
+            .search-dudi .btn { border-color: var(--brand-600); color: var(--brand-600); }
+            .search-dudi .btn:hover { background: var(--brand-50); }
+          </style>
+
+          <div class="d-flex justify-content-between align-items-center mb-3 search-dudi">
+            <div class="input-group" style="max-width:520px;">
+              <span class="input-group-text"><i class="fas fa-search"></i></span>
               <input id="dudi-search" class="form-control" placeholder="Cari perusahaan, alamat, penanggung jawab...">
-              <button id="btn-search-dudi" class="btn btn-outline-secondary">Cari</button>
+              <button id="btn-search-dudi" class="btn">Cari</button>
             </div>
           </div>
+
           <div class="row g-3" id="dudi-grid"></div>
         </section>
 
         <!-- Jurnal Harian -->
         <section id="sec-logbook" class="content-section" data-section style="display: none;">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-semibold mb-0">Jurnal Harian Magang</h4>
-            <button class="btn btn-primary" onclick="openCreateLogbook()">
-              <i class="bi bi-plus-circle me-1"></i> + Tambah Jurnal
-            </button>
-          </div>
+          <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h4 class="fw-semibold mb-0">Jurnal Harian Magang</h4>
+              <button class="btn btn-success" onclick="openCreateLogbook()">
+                <i class="bi bi-plus-circle me-1"></i> + Tambah Jurnal
+              </button>
+            </div>
 
           <!-- Reminder Banner -->
           <div id="reminder-banner" class="alert alert-warning d-none mb-4">
@@ -302,7 +482,7 @@
             <div class="col-md-3">
               <div class="card text-center">
                 <div class="card-body">
-                  <h5 class="card-title text-primary" id="total-jurnal">0</h5>
+                  <h5 class="card-title text-success" id="total-jurnal">0</h5>
                   <p class="card-text small text-muted">Total Jurnal</p>
                 </div>
               </div>
@@ -333,29 +513,47 @@
             </div>
           </div>
 
-          <!-- Search & Filter -->
-          <div class="card mb-4">
-            <div class="card-body">
+          <!-- Modern Search & Filter -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 pb-0">
+              <div class="d-flex align-items-center">
+                <div class="logbook-icon bg-success bg-opacity-10 text-success me-3">
+                  <i class="fas fa-search"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-bold text-dark">Pencarian & Filter</h5>
+                  <small class="text-muted">Cari dan filter jurnal harian Anda</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-3">
               <div class="row g-3">
-                <div class="col-md-6">
-                  <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                    <input type="text" id="search-logbook" class="form-control" placeholder="Cari kegiatan atau kendala...">
+                <div class="col-md-8">
+                  <div class="input-group modern-search">
+                    <span class="input-group-text bg-success bg-opacity-10 border-success border-opacity-25">
+                      <i class="fas fa-search text-success"></i>
+                    </span>
+                    <input type="text" id="search-logbook" class="form-control border-success border-opacity-25" 
+                           placeholder="Cari kegiatan atau kendala..." style="border-left: none;">
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
-                    <i class="bi bi-funnel me-1"></i> Filter
-                  </button>
-                  <button class="btn btn-outline-danger ms-2" onclick="resetFilters()">Reset Filter</button>
+                <div class="col-md-4">
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                      <i class="fas fa-filter me-1"></i> Filter
+                    </button>
+                    <button class="btn btn-outline-secondary" onclick="resetFilters()">
+                      <i class="fas fa-undo me-1"></i> Reset
+                    </button>
+                  </div>
                 </div>
               </div>
               
               <div class="collapse mt-3" id="filterCollapse">
                 <div class="row g-3">
                   <div class="col-md-4">
-                    <label class="form-label">Status</label>
-                    <select id="filter-status" class="form-select">
+                    <label class="form-label fw-semibold text-dark">Status</label>
+                    <select id="filter-status" class="form-select border-success border-opacity-25">
                       <option value="">Semua Status</option>
                       <option value="disetujui">Disetujui</option>
                       <option value="menunggu">Menunggu Verifikasi</option>
@@ -363,8 +561,8 @@
                     </select>
                   </div>
                   <div class="col-md-4">
-                    <label class="form-label">Bulan</label>
-                    <select id="filter-bulan" class="form-select">
+                    <label class="form-label fw-semibold text-dark">Bulan</label>
+                    <select id="filter-bulan" class="form-select border-success border-opacity-25">
                       <option value="">Semua Bulan</option>
                       <option value="01">Januari</option>
                       <option value="02">Februari</option>
@@ -381,8 +579,8 @@
                     </select>
                   </div>
                   <div class="col-md-4">
-                    <label class="form-label">Tahun</label>
-                    <select id="filter-tahun" class="form-select">
+                    <label class="form-label fw-semibold text-dark">Tahun</label>
+                    <select id="filter-tahun" class="form-select border-success border-opacity-25">
                       <option value="">Semua Tahun</option>
                       <option value="2024">2024</option>
                       <option value="2025">2025</option>
@@ -393,56 +591,70 @@
             </div>
           </div>
 
-          <!-- Journal List -->
-          <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h6 class="mb-0">Riwayat Jurnal</h6>
-              <div class="d-flex align-items-center">
-                <label class="form-label me-2 mb-0">Tampilkan:</label>
-                <select id="per-page" class="form-select form-select-sm" style="width:auto;">
-                  <option value="10">10 per halaman</option>
-                  <option value="25">25 per halaman</option>
-                  <option value="50">50 per halaman</option>
-                </select>
+          <!-- Modern Journal List -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pb-0">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                  <div class="logbook-icon bg-success bg-opacity-10 text-success me-3">
+                    <i class="fas fa-book"></i>
+                  </div>
+                  <div>
+                    <h5 class="mb-0 fw-bold text-dark">Riwayat Jurnal</h5>
+                    <small class="text-muted">Daftar jurnal harian Anda</small>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center">
+                  <label class="form-label me-2 mb-0 fw-semibold text-dark">Tampilkan:</label>
+                  <select id="per-page" class="form-select form-select-sm border-success border-opacity-25" style="width:auto;">
+                    <option value="10">10 per halaman</option>
+                    <option value="25">25 per halaman</option>
+                    <option value="50">50 per halaman</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                  <thead class="table-light">
+                <table class="table table-hover mb-0 modern-table">
+                  <thead class="table-success table-opacity-10">
                     <tr>
-                      <th>Tanggal</th>
-                      <th>Kegiatan & Kendala</th>
-                      <th>Status</th>
-                      <th>Feedback Guru</th>
-                      <th>Aksi</th>
+                      <th class="border-0 fw-semibold text-dark">Tanggal</th>
+                      <th class="border-0 fw-semibold text-dark">Kegiatan & Kendala</th>
+                      <th class="border-0 fw-semibold text-dark">Status</th>
+                      <th class="border-0 fw-semibold text-dark">Feedback Guru</th>
+                      <th class="border-0 fw-semibold text-dark">Aksi</th>
                     </tr>
                   </thead>
                   <tbody id="logbook-list">
                     <tr>
-                      <td colspan="5" class="text-center py-4">
-                        <div class="text-muted">Memuat data...</div>
+                      <td colspan="5" class="text-center py-5">
+                        <div class="d-flex flex-column align-items-center">
+                          <i class="fas fa-spinner fa-spin fa-2x text-success mb-3"></i>
+                          <div class="text-muted">Memuat data...</div>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <div class="card-footer">
+            <div class="card-footer bg-white border-0">
               <div class="d-flex justify-content-between align-items-center">
-                <div id="pagination-info" class="text-muted small">Menampilkan 0 sampai 0 dari 0 entri</div>
+                <div id="pagination-info" class="text-muted small fw-semibold">Menampilkan 0 sampai 0 dari 0 entri</div>
                 <nav>
                   <ul id="pagination" class="pagination pagination-sm mb-0"></ul>
                 </nav>
               </div>
             </div>
           </div>
+          </div>
         </section>
 
         <section id="sec-magang" class="content-section" data-section style="display: none;">
           <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-semibold mb-0">Status Magang Saya</h4>
-            <button class="btn btn-outline-primary" onclick="loadInternshipData()">
+            <button class="btn btn-outline-success" onclick="loadInternshipData()">
               <i class="fas fa-sync-alt me-1"></i>Refresh
             </button>
           </div>
@@ -451,7 +663,7 @@
           <div class="card border-0 shadow-sm">
             <div class="card-body p-4">
               <div id="internship-loading" class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
+                <div class="spinner-border text-success" role="status">
                   <span class="visually-hidden">Memuat data...</span>
                 </div>
                 <p class="mt-2 text-muted">Memuat data magang...</p>
@@ -461,25 +673,31 @@
                 <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
                 <h5 class="text-muted">Belum Ada Data Magang</h5>
                 <p class="text-muted">Anda belum memiliki penempatan magang aktif. Silakan daftar melalui menu DUDI.</p>
-                <button class="btn btn-primary" onclick="showSection('sec-dudi')">
+                <button class="btn btn-success" onclick="showSection('sec-dudi')">
                   <i class="fas fa-building me-1"></i>Daftar Magang
                 </button>
               </div>
               
-              <div id="internship-data" class="d-none">
+              <div id="internship-data" class="<?= !empty($magang_info) ? '' : 'd-none' ?>">
                 <div class="row">
                   <!-- Student Information -->
                   <div class="col-md-6 mb-4">
                     <div class="card border-0 bg-light h-100">
                       <div class="card-body p-4">
-                        <h6 class="card-title mb-3 text-primary">
+                        <h6 class="card-title mb-3 text-success">
                           <i class="fas fa-user me-2"></i>Data Siswa
                         </h6>
                         <div class="row g-3">
                           <div class="col-6">
                             <div class="mb-2">
                               <label class="form-label fw-semibold text-muted small mb-1">Nama Siswa</label>
-                              <div class="fw-semibold" id="internship-siswa-nama">-</div>
+                              <div class="fw-semibold" id="internship-siswa-nama"><?= $user['name'] ?? '-' ?></div>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="mb-2">
+                              <label class="form-label fw-semibold text-muted small mb-1">Email</label>
+                              <div class="fw-semibold" id="internship-siswa-email"><?= $user['email'] ?? '-' ?></div>
                             </div>
                           </div>
                           <div class="col-6">
@@ -509,26 +727,26 @@
                   <div class="col-md-6 mb-4">
                     <div class="card border-0 bg-light h-100">
                       <div class="card-body p-4">
-                        <h6 class="card-title mb-3 text-primary">
+                        <h6 class="card-title mb-3 text-success">
                           <i class="fas fa-building me-2"></i>Data Perusahaan
                         </h6>
                         <div class="row g-3">
                           <div class="col-12">
                             <div class="mb-2">
                               <label class="form-label fw-semibold text-muted small mb-1">Nama Perusahaan</label>
-                              <div class="fw-semibold" id="internship-company-nama">-</div>
+                              <div class="fw-semibold" id="internship-company-nama"><?= $magang_info ? ($magang_info['nama_perusahaan'] ?? '-') : '-' ?></div>
                             </div>
                           </div>
                           <div class="col-12">
                             <div class="mb-2">
                               <label class="form-label fw-semibold text-muted small mb-1">Alamat Perusahaan</label>
-                              <div class="fw-semibold" id="internship-company-alamat">-</div>
+                              <div class="fw-semibold" id="internship-company-alamat"><?= $magang_info ? ($magang_info['alamat'] ?? '-') : '-' ?></div>
                             </div>
                           </div>
                           <div class="col-12">
                             <div class="mb-2">
-                              <label class="form-label fw-semibold text-muted small mb-1">Penanggung Jawab</label>
-                              <div class="fw-semibold" id="internship-company-pic">-</div>
+                              <label class="form-label fw-semibold text-muted small mb-1">Telepon</label>
+                              <div class="fw-semibold" id="internship-company-pic"><?= $magang_info ? ($magang_info['telepon'] ?? '-') : '-' ?></div>
                             </div>
                           </div>
                         </div>
@@ -542,33 +760,33 @@
                   <div class="col-md-8">
                     <div class="card border-0 bg-light">
                       <div class="card-body p-4">
-                        <h6 class="card-title mb-3 text-primary">
+                        <h6 class="card-title mb-3 text-success">
                           <i class="fas fa-calendar-alt me-2"></i>Detail Magang
                         </h6>
                         <div class="row g-3">
                           <div class="col-md-6">
                             <div class="mb-2">
                               <label class="form-label fw-semibold text-muted small mb-1">Periode Magang</label>
-                              <div class="fw-semibold" id="internship-periode">-</div>
+                              <div class="fw-semibold" id="internship-periode"><?= $magang_info ? date('d/m/Y', strtotime($magang_info['tanggal_mulai'])) . ' - ' . date('d/m/Y', strtotime($magang_info['tanggal_selesai'])) : 'Belum ada magang' ?></div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="mb-2">
                               <label class="form-label fw-semibold text-muted small mb-1">Durasi</label>
-                              <div class="fw-semibold" id="internship-durasi">-</div>
+                              <div class="fw-semibold" id="internship-durasi"><?= $magang_info ? ceil((strtotime($magang_info['tanggal_selesai']) - strtotime($magang_info['tanggal_mulai'])) / (60 * 60 * 24)) . ' hari' : '0 hari' ?></div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="mb-2">
                               <label class="form-label fw-semibold text-muted small mb-1">Guru Pembimbing</label>
-                              <div class="fw-semibold" id="internship-guru-nama">-</div>
-                              <div class="small text-muted" id="internship-guru-nip">-</div>
+                              <div class="fw-semibold" id="internship-guru-nama"><?= $magang_info ? ($magang_info['guru_name'] ?? '-') : '-' ?></div>
+                              <div class="small text-muted" id="internship-guru-nip">Guru Pembimbing</div>
                             </div>
                           </div>
                           <div class="col-md-6">
                             <div class="mb-2">
-                              <label class="form-label fw-semibold text-muted small mb-1">Tanggal Mulai</label>
-                              <div class="fw-semibold" id="internship-tanggal-mulai">-</div>
+                              <label class="form-label fw-semibold text-muted small mb-1">Status</label>
+                              <div class="fw-semibold" id="internship-tanggal-mulai"><?= $magang_info ? ($magang_info['status'] ?? '-') : '-' ?></div>
                             </div>
                           </div>
                         </div>
@@ -580,19 +798,19 @@
                   <div class="col-md-4">
                     <div class="card border-0 bg-light h-100">
                       <div class="card-body p-4">
-                        <h6 class="card-title mb-3 text-primary">
+                        <h6 class="card-title mb-3 text-success">
                           <i class="fas fa-chart-line me-2"></i>Status & Nilai
                         </h6>
                         <div class="text-center">
                           <div class="mb-3">
                             <label class="form-label fw-semibold text-muted small mb-1">Status</label>
-                            <div id="internship-status-badge" class="badge fs-6 px-3 py-2">-</div>
+                            <div id="internship-status-badge" class="badge fs-6 px-3 py-2 bg-<?= $magang_info ? ($magang_info['status'] === 'aktif' ? 'success' : ($magang_info['status'] === 'pending' ? 'warning' : 'secondary')) : 'secondary' ?>"><?= $magang_info ? ($magang_info['status'] ?? '-') : '-' ?></div>
                           </div>
                           <div class="mb-3">
                             <label class="form-label fw-semibold text-muted small mb-1">Nilai Akhir</label>
-                            <div class="display-6 fw-bold text-primary" id="internship-nilai">-</div>
+                            <div class="display-6 fw-bold text-success" id="internship-nilai"><?= $magang_info ? ($magang_info['nilai_akhir'] ?? '-') : '-' ?></div>
                           </div>
-                          <div class="small text-muted" id="internship-updated">-</div>
+                          <div class="small text-muted" id="internship-updated">Total Logbook: <?= $logbook_count ?? 0 ?></div>
                         </div>
                       </div>
                     </div>
@@ -616,7 +834,7 @@
             <span id="md-title">Detail DUDI</span>
             <span id="md-status" class="badge rounded-pill d-none">Menunggu Verifikasi</span>
           </h5>
-          <div id="md-subtitle" class="small text-primary"></div>
+          <div id="md-subtitle" class="small text-success"></div>
         </div>
         <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
@@ -680,7 +898,7 @@
 
       <div class="modal-footer">
         <button class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-        <button id="md-daftar" class="btn btn-primary"><span class="me-1">✈</span> Daftar Magang</button>
+        <button id="md-daftar" class="btn btn-success"><span class="me-1">✈</span> Daftar Magang</button>
       </div>
     </div></div>
   </div>
@@ -747,6 +965,16 @@
               </div>
             </div>
 
+            <!-- Kendala yang Dihadapi -->
+            <div class="mb-4">
+              <label class="form-label">Kendala yang Dihadapi (Opsional)</label>
+              <textarea id="logbook-kendala" class="form-control" rows="4" 
+                        placeholder="Deskripsikan kendala atau hambatan yang Anda hadapi selama melakukan kegiatan hari ini. Contoh: Kesulitan memahami konsep tertentu, masalah teknis, atau kendala lainnya..."></textarea>
+              <div class="mt-2">
+                <small class="text-muted">Jelaskan kendala yang dihadapi untuk membantu guru memberikan bimbingan yang tepat</small>
+              </div>
+            </div>
+
             <!-- Dokumentasi Pendukung -->
             <div class="mb-4">
               <label class="form-label">Upload File (Opsional)</label>
@@ -757,7 +985,7 @@
                 <p class="mb-2">Pilih file dokumentasi</p>
                 <p class="text-muted small mb-3">PDF, DOC, DOCX, JPG, PNG (Max 5MB)</p>
                 <input type="file" id="logbook-file" class="d-none" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
-                <button type="button" class="btn btn-primary" onclick="document.getElementById('logbook-file').click()">
+                <button type="button" class="btn btn-success" onclick="document.getElementById('logbook-file').click()">
                   Browse File
                 </button>
               </div>
@@ -781,9 +1009,10 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button class="btn btn-primary" onclick="saveLogbook()" id="save-btn">Simpan Jurnal</button>
+          <button class="btn btn-success" onclick="saveLogbook()" id="save-btn">Simpan Jurnal</button>
         </div>
       </div>
+      </main>
     </div>
   </div>
 
@@ -812,7 +1041,7 @@
               <div class="row">
             <div class="col-md-6">
                   <h6 class="mb-3">
-                    <i class="fas fa-user text-primary me-2"></i>Informasi Siswa
+                    <i class="fas fa-user text-success me-2"></i>Informasi Siswa
                   </h6>
                   <div class="d-flex align-items-center mb-3">
                     <div class="bg-primary text-white rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
@@ -860,7 +1089,7 @@
           <!-- Tanggal dan Status -->
           <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded">
             <div class="d-flex align-items-center">
-              <i class="fas fa-calendar text-primary me-2"></i>
+              <i class="fas fa-calendar text-success me-2"></i>
               <span id="view-tanggal">-</span>
             </div>
             <div id="view-status" class="badge fs-6 px-3 py-2">-</div>
@@ -1003,34 +1232,36 @@
 
     // ---- UI: Tabs sederhana ----
     function showSection(id){
-      // Hide all sections safely
-      document.querySelectorAll('[data-section]').forEach(s => {
-        if(s && s.style) s.style.display = 'none';
+      // Hide all content sections (dashboard/dudi/logbook/magang)
+      document.querySelectorAll('[data-section]').forEach(section => {
+        if (section && section.style) section.style.display = 'none';
       });
-      
-      // Show target section safely
-      const targetSection = document.getElementById(id);
-      if(targetSection && targetSection.style) {
-        targetSection.style.display = 'block';
+
+      // Explicitly ensure dashboard is hidden when not selected
+      const dash = document.getElementById('sec-dashboard');
+      if (dash && id !== 'sec-dashboard') dash.style.display = 'none';
+
+      // Show target section
+      const target = document.getElementById(id);
+      if (target && target.style) {
+        target.style.display = 'block';
       } else {
         console.error('Section not found:', id);
         return;
       }
-      
-      // Update sidebar links safely
-      document.querySelectorAll('.sidebar-link').forEach(a => {
-        if(a && a.classList) a.classList.remove('active');
-      });
-      
-      const link = document.querySelector(`[data-link="${id}"]`);
-      if(link && link.classList){ 
-        link.classList.add('active'); 
-      }
-      
-      // Load internship data when switching to magang section
-      if(id === 'sec-magang') {
-        loadInternshipData();
-      }
+
+      // Toggle greeting visibility explicitly
+      const greet = document.getElementById('greet');
+      if (greet) greet.style.display = (id === 'sec-dashboard') ? 'block' : 'none';
+
+      // Sidebar active state
+      document.querySelectorAll('.sidebar-link').forEach(a => a?.classList?.remove('active'));
+      document.querySelector(`[data-link="${id}"]`)?.classList?.add('active');
+
+      // Section-specific loaders
+      if (id === 'sec-magang') loadInternshipData();
+      if (id === 'sec-dudi') { DUDI_CACHE = []; loadDudiList(); }
+      if (id === 'sec-logbook') loadLogbookList();
     }
 
     // Navigation functions
@@ -1102,43 +1333,8 @@
             return [];
           }
           
-          // Fallback data untuk testing - sesuai dengan database yang sebenarnya
-          console.log('Using fallback DUDI data for testing');
-          return [
-            {
-              id: 1,
-              nama_perusahaan: 'PT Kreatif Teknologi',
-              alamat: 'Jl. Merdeka No. 123, Jakarta',
-              penanggung_jawab: 'Andi Wijaya',
-              telepon: '021-12345678',
-              email: 'info@kreatiftek.com',
-              status: 'aktif',
-              kuota: 5,
-              jumlah_siswa: 1
-            },
-            {
-              id: 2,
-              nama_perusahaan: 'CV Digital Solusi',
-              alamat: 'Jl. Sudirman No. 45, Surabaya',
-              penanggung_jawab: 'Sari Dewi',
-              telepon: '031-87654321',
-              email: 'contact@digitalsolusi.com',
-              status: 'aktif',
-              kuota: 3,
-              jumlah_siswa: 0
-            },
-            {
-              id: 3,
-              nama_perusahaan: 'PT Pusat Madiun',
-              alamat: 'Madiun',
-              penanggung_jawab: 'Jokowi Widodo',
-              telepon: '089634567829',
-              email: 'pusatmadiun@simma.test',
-              status: 'aktif',
-              kuota: 4,
-              jumlah_siswa: 2
-            }
-          ];
+          console.log('DUDI API failed, returning empty array');
+          return [];
         }
       } catch(error) {
         console.error('Error fetching DUDI:', error);
@@ -1186,44 +1382,11 @@
           SERVER_REGS = []; 
         }
         
-        // If no data from API, use fallback data - sesuai dengan database yang sebenarnya
+        // If no data from API, show empty state
         if(DUDI_CACHE.length === 0) {
-          console.log('No DUDI data from API, using fallback data');
-          DUDI_CACHE = [
-            {
-              id: 1,
-              nama_perusahaan: 'PT Kreatif Teknologi',
-              alamat: 'Jl. Merdeka No. 123, Jakarta',
-              penanggung_jawab: 'Andi Wijaya',
-              telepon: '021-12345678',
-              email: 'info@kreatiftek.com',
-              status: 'aktif',
-              kuota: 5,
-              jumlah_siswa: 1
-            },
-            {
-              id: 2,
-              nama_perusahaan: 'CV Digital Solusi',
-              alamat: 'Jl. Sudirman No. 45, Surabaya',
-              penanggung_jawab: 'Sari Dewi',
-              telepon: '031-87654321',
-              email: 'contact@digitalsolusi.com',
-              status: 'aktif',
-              kuota: 3,
-              jumlah_siswa: 0
-            },
-            {
-              id: 3,
-              nama_perusahaan: 'PT Pusat Madiun',
-              alamat: 'Madiun',
-              penanggung_jawab: 'Jokowi Widodo',
-              telepon: '089634567829',
-              email: 'pusatmadiun@simma.test',
-              status: 'aktif',
-              kuota: 4,
-              jumlah_siswa: 2
-            }
-          ];
+          console.log('No DUDI data from API');
+          grid.innerHTML = '<div class="text-center text-muted py-5"><i class="fas fa-building fa-3x mb-3 opacity-50"></i><div>Tidak ada data DUDI tersedia</div></div>';
+          return;
         }
         
         const rows = (DUDI_CACHE||[]).filter(d => {
@@ -1243,32 +1406,40 @@
           const col = document.createElement('div');
           col.className = 'col-lg-4 col-md-6';
           const terisi = (typeof d.jumlah_siswa==='number')?d.jumlah_siswa:parseInt(d.jumlah_siswa||'0',10)||0;
-          const kuota = Number.isFinite(d.kuota)?d.kuota: (d.capacity||8);
+          const kuota = (d.kuota !== null && d.kuota !== undefined && d.kuota !== '') ? 
+            (Number.isFinite(Number(d.kuota)) ? Number(d.kuota) : 0) : 0;
+          
+          // Debug logging
+          console.log('DUDI Data:', d);
+          console.log('Terisi:', terisi, 'Kuota:', kuota, 'd.kuota:', d.kuota, 'Type:', typeof d.kuota);
+          console.log('SERVER_REGS:', SERVER_REGS);
+          console.log('Looking for DUDI ID:', d.id, 'in SERVER_REGS');
           const sisa = Math.max(kuota - terisi, 0);
           const reg = (SERVER_REGS||[]).find(r => String(r.dudi_id)===String(d.id));
           const status = reg ? (reg.status||'pending') : '';
+          console.log('Found reg:', reg, 'Status:', status);
           const badge = status==='aktif' ? '<span class="badge bg-success">Aktif</span>' : (status==='pending' ? '<span class="badge bg-warning text-dark">Menunggu</span>' : '');
           const progress = Math.max(0, Math.min(100, Math.round((terisi/Math.max(kuota,1))*100)));
           const btnDisabled = !!status;
-          const btnLabel = status==='aktif' ? 'Sudah Aktif' : (status==='pending' ? 'Sudah Mendaftar' : 'Daftar');
+          const btnLabel = status==='aktif' ? 'Berlangsung' : (status==='pending' ? 'Mendaftar' : 'Daftar');
+          console.log('Button Label:', btnLabel, 'Disabled:', btnDisabled);
           col.innerHTML = `
-            <div class="card h-100 shadow-sm">
-              <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                  <div class="fw-semibold">${d.nama_perusahaan||'-'}</div>
-                  <div>${badge}</div>
-                </div>
-                <div class="text-primary small mb-2">${d.bidang||d.sektor||d.industri||''}</div>
-                <div class="small text-muted mb-2"><i class="bi bi-geo-alt"></i> ${d.alamat||'-'}</div>
-                ${d.penanggung_jawab?`<div class="small text-muted mb-2">PIC: ${d.penanggung_jawab}</div>`:''}
-                <div class="mt-1 mb-1 small">Kuota Magang <span class="fw-semibold">${terisi}/${kuota}</span></div>
-                <div class="progress" style="height:8px;">
-                  <div class="progress-bar" role="progressbar" style="width:${progress}%" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="small text-muted mt-1 mb-3">${sisa} slot tersisa</div>
-                <div class="mt-auto d-flex justify-content-between align-items-center">
-                  <button class="btn btn-outline-secondary btn-sm" onclick='openDudiDetail(${JSON.stringify(d.id)})'>Detail</button>
-                  <button class="btn ${btnDisabled?'btn-secondary':'btn-primary'} btn-sm" ${btnDisabled?'disabled':''} onclick='${btnDisabled?'':'registerDudi('+JSON.stringify(d.id)+')'}'>${btnLabel}</button>
+            <div class="dudi-card h-100">
+              <div class="head">
+                <div class="logo"><i class="fas fa-building"></i></div>
+                <div class="title">${d.nama_perusahaan||'-'}</div>
+                <div class="ms-auto">${badge}</div>
+              </div>
+              <div class="meta">
+                <div><i class="fas fa-map-marker-alt me-2"></i>${d.alamat||'-'}</div>
+                ${d.penanggung_jawab?`<div><i class="fas fa-user-tie me-2"></i>PIC: ${d.penanggung_jawab}</div>`:''}
+              </div>
+              <div class="progress"><div class="progress-bar" style="width:${progress}%"></div></div>
+              <div class="foot">
+                <small class="text-muted">Kuota Magang <b>${terisi}/${kuota}</b></small>
+                <div>
+                  <button class="btn btn-sm btn-outline-secondary me-2" onclick='openDudiDetail(${JSON.stringify(d.id)})'>Detail</button>
+                  <button class="btn btn-sm ${btnDisabled?'btn-secondary':'btn-dudi'}" ${btnDisabled?'disabled':''} onclick='${btnDisabled?'':'registerDudi('+JSON.stringify(d.id)+')'}'>${btnLabel}</button>
                 </div>
               </div>
             </div>
@@ -1322,7 +1493,8 @@
 
       // Body fields
       // hitung kuota & terisi dari data server jika tersedia
-      const kuota = Number.isFinite(d.kuota) ? d.kuota : (d.capacity||8);
+      const kuota = (d.kuota !== null && d.kuota !== undefined && d.kuota !== '') ? 
+        (Number.isFinite(Number(d.kuota)) ? Number(d.kuota) : 0) : 0;
       const terisiRaw = (d.jumlah_siswa!==undefined? d.jumlah_siswa : (d.terisi!==undefined? d.terisi : (d.filled||0)));
       const terisi = (typeof terisiRaw === 'number') ? terisiRaw : (parseInt(terisiRaw,10) || 0);
       const email = d.email || '';
@@ -1343,12 +1515,12 @@
       if(btn){
         if(sudahDaftar){
           btn.disabled = true;
-          if(btn.classList.contains('btn-primary')) btn.classList.replace('btn-primary','btn-secondary');
-          btn.textContent = (regStatus==='aktif') ? 'Sudah Aktif' : (regStatus==='selesai' ? 'Sudah Selesai' : 'Sudah Mendaftar');
+          if(btn.classList.contains('btn-success')) btn.classList.replace('btn-success','btn-secondary');
+          btn.textContent = (regStatus==='aktif') ? 'Berlangsung' : (regStatus==='selesai' ? 'Sudah Selesai' : 'Mendaftar');
           btn.onclick = null;
         }else{
           btn.disabled = false;
-          if(btn.classList.contains('btn-secondary')) btn.classList.replace('btn-secondary','btn-primary');
+          if(btn.classList.contains('btn-secondary')) btn.classList.replace('btn-secondary','btn-success');
           btn.innerHTML = '<span class="me-1">✈</span> Daftar Magang';
           btn.onclick = () => registerDudi(id, true);
         }
@@ -1529,7 +1701,17 @@
     function renderLogbookList(){
       const tbody = document.getElementById('logbook-list');
       if(LOGBOOK_DATA.length === 0){
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4"><div class="text-muted">Tidak ada jurnal ditemukan</div></td></tr>';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center py-5">
+              <div class="d-flex flex-column align-items-center">
+                <i class="fas fa-book fa-3x text-muted opacity-50 mb-3"></i>
+                <div class="text-muted fw-semibold">Tidak ada jurnal ditemukan</div>
+                <small class="text-muted">Mulai buat jurnal harian Anda</small>
+              </div>
+            </td>
+          </tr>
+        `;
         return;
       }
       
@@ -1542,29 +1724,71 @@
                           log.status_verifikasi === 'ditolak' ? 'Ditolak' : 'Menunggu Verifikasi';
         const feedback = log.catatan_guru || 'Belum ada feedback';
         const kegiatan = log.kegiatan || '';
-        const kegiatanShort = kegiatan.length > 100 ? kegiatan.substring(0, 100) + '...' : kegiatan;
+        const kegiatanShort = kegiatan.length > 60 ? kegiatan.substring(0, 60) + '...' : kegiatan;
+        const kendala = log.kendala || '';
+        const kendalaShort = kendala.length > 40 ? kendala.substring(0, 40) + '...' : kendala;
         
         row.innerHTML = `
           <td>
-            <div class="fw-semibold">${formatDate(log.tanggal)}</div>
-            <div class="small text-muted">${formatDateFull(log.tanggal)}</div>
+            <div class="d-flex align-items-center">
+              <div class="logbook-date-icon bg-success bg-opacity-10 text-success me-3">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+              <div>
+                <div class="fw-semibold text-dark">${formatDate(log.tanggal)}</div>
+                <div class="small text-muted">${formatDateFull(log.tanggal)}</div>
+              </div>
+            </div>
           </td>
           <td>
-            <div class="mb-1">${kegiatanShort}</div>
-            ${kegiatan.length > 100 ? '<small class="text-muted">Klik detail untuk melihat lengkap</small>' : ''}
+            <div class="logbook-content">
+              <div class="mb-2">
+                <div class="d-flex align-items-start">
+                  <i class="fas fa-tasks text-success me-2 mt-1"></i>
+                  <div>
+                    <div class="fw-semibold text-dark mb-1">Kegiatan:</div>
+                    <div class="text-dark">${kegiatanShort}</div>
+                    ${kegiatan.length > 60 ? '<small class="text-muted">Klik detail untuk melihat lengkap</small>' : ''}
+                  </div>
+                </div>
+              </div>
+              ${kendala ? `
+                <div class="d-flex align-items-start">
+                  <i class="fas fa-exclamation-triangle text-warning me-2 mt-1"></i>
+                  <div>
+                    <div class="fw-semibold text-dark mb-1">Kendala:</div>
+                    <div class="text-dark">${kendalaShort}</div>
+                    ${kendala.length > 40 ? '<small class="text-muted">Klik detail untuk melihat lengkap</small>' : ''}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
           </td>
           <td>
-            <span class="badge ${statusClass}">${statusText}</span>
-            ${log.status_verifikasi === 'ditolak' ? '<div class="small text-muted mt-1">Perlu diperbaiki</div>' : ''}
+            <div class="d-flex flex-column align-items-start">
+              <span class="badge ${statusClass} mb-1">${statusText}</span>
+              ${log.status_verifikasi === 'ditolak' ? '<small class="text-muted">Perlu diperbaiki</small>' : ''}
+            </div>
           </td>
           <td>
-            <div class="small">${feedback}</div>
+            <div class="logbook-feedback">
+              <div class="d-flex align-items-start">
+                <i class="fas fa-comment text-info me-2 mt-1"></i>
+                <div class="small text-dark">${feedback}</div>
+              </div>
+            </div>
           </td>
           <td>
-            <div class="d-flex gap-2">
-              <button class="btn btn-sm btn-outline-primary" onclick="viewLogbook(${log.id})" title="Lihat detail">Lihat</button>
-              <button class="btn btn-sm btn-outline-warning" ${log.status_verifikasi==='disetujui'?'disabled':''} onclick="${log.status_verifikasi==='disetujui'?'':'editLogbook('+log.id+')'}" title="Edit jurnal">Edit</button>
-              <button class="btn btn-sm btn-outline-danger" ${log.status_verifikasi==='disetujui'?'disabled':''} onclick="${log.status_verifikasi==='disetujui'?'':'deleteLogbook('+log.id+')'}" title="Hapus jurnal">Hapus</button>
+            <div class="d-flex gap-1">
+              <button class="btn btn-sm btn-outline-info" onclick="viewLogbook(${log.id})" title="Lihat detail">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-warning" ${log.status_verifikasi==='disetujui'?'disabled':''} onclick="${log.status_verifikasi==='disetujui'?'':'editLogbook('+log.id+')'}" title="Edit jurnal">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" ${log.status_verifikasi==='disetujui'?'disabled':''} onclick="${log.status_verifikasi==='disetujui'?'':'deleteLogbook('+log.id+')'}" title="Hapus jurnal">
+                <i class="fas fa-trash"></i>
+              </button>
             </div>
           </td>
         `;
@@ -1761,10 +1985,12 @@
         const idEl = document.getElementById('logbook-id');
         const tanggalEl = document.getElementById('logbook-tanggal');
         const kegiatanEl = document.getElementById('logbook-kegiatan');
+        const kendalaEl = document.getElementById('logbook-kendala');
         
         if (idEl) idEl.value = log.id;
         if (tanggalEl) tanggalEl.value = log.tanggal;
         if (kegiatanEl) kegiatanEl.value = log.kegiatan || '';
+        if (kendalaEl) kendalaEl.value = log.kendala || '';
         
         // Update character counter
         updateCharacterCounter();
@@ -1890,7 +2116,7 @@
             const fileExtension = log.file.split('.').pop().toLowerCase();
             const iconClass = fileExtension === 'pdf' ? 'fa-file-pdf text-danger' : 
                              ['jpg', 'jpeg', 'png'].includes(fileExtension) ? 'fa-file-image text-success' : 
-                             'fa-file text-primary';
+                             'fa-file text-success';
             
             docContainer.innerHTML = `
               <div class="d-flex justify-content-between align-items-center p-3 bg-success bg-opacity-10 rounded">
@@ -1996,9 +2222,9 @@
     }
 
     function downloadDocument(filename) {
-      // Create a temporary link to download the file
+      // Create a temporary link to download the file using the file controller
       const link = document.createElement('a');
-      link.href = `/uploads/${filename}`;
+      link.href = `/file/download/${filename}`;
       link.download = filename;
       document.body.appendChild(link);
       link.click();
@@ -2010,9 +2236,10 @@
       const id = document.getElementById('logbook-id').value;
       const tanggal = document.getElementById('logbook-tanggal').value;
       const kegiatan = document.getElementById('logbook-kegiatan').value.trim();
+      const kendala = document.getElementById('logbook-kendala').value.trim();
       const fileInput = document.getElementById('logbook-file');
       
-      console.log('Form data:', { id, tanggal, kegiatan, hasFile: fileInput.files.length > 0 });
+      console.log('Form data:', { id, tanggal, kegiatan, kendala, hasFile: fileInput.files.length > 0 });
       
       // Clear previous errors
       hideFormErrors();
@@ -2055,7 +2282,8 @@
         
         const requestData = {
           tanggal: tanggal,
-          kegiatan: kegiatan
+          kegiatan: kegiatan,
+          kendala: kendala
         };
         
         // Handle file upload if file is selected
@@ -2411,6 +2639,7 @@
     function populateInternshipData(data) {
       // Student information
       document.getElementById('internship-siswa-nama').textContent = data.siswa_nama || '-';
+      document.getElementById('internship-siswa-email').textContent = data.siswa_email || data.email || '-';
       document.getElementById('internship-siswa-nis').textContent = data.nis || '-';
       document.getElementById('internship-siswa-kelas').textContent = data.kelas || '-';
       document.getElementById('internship-siswa-jurusan').textContent = data.jurusan || '-';
@@ -2572,7 +2801,9 @@
       console.log('openDudiDetail function:', typeof openDudiDetail);
       
       const { u } = requireAuth();
-      document.getElementById('greet').innerText = 'Selamat datang, ' + (u.name||'Siswa');
+      // Set greet text only once; visibility will be controlled by showSection
+      const greetElInit = document.getElementById('greet');
+      if (greetElInit) greetElInit.innerText = 'Selamat datang, ' + (u.name||'Siswa');
       loadUserInfo(); // Load user info untuk navbar
       loadSchoolInfo();
       updateRegCounter();
@@ -2592,8 +2823,10 @@
       });
       document.querySelector('[data-link="sec-magang"]').addEventListener('click', e=>{ e.preventDefault(); showSection('sec-magang'); });
 
-      // Initial
-      showSection('sec-dashboard');
+      // Initial: if URL hash points to specific section, open it; else dashboard
+      const hash = (location.hash||'').replace('#','');
+      const target = ['sec-dashboard','sec-dudi','sec-logbook','sec-magang'].includes(hash) ? hash : 'sec-dashboard';
+      showSection(target);
 
       // Search - with null checks
       const btnSearchDudi = document.getElementById('btn-search-dudi');

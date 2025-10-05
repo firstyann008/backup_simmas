@@ -9,7 +9,7 @@ class DudiModel extends Model
     protected $table = 'dudi';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'user_id', 'nama_perusahaan', 'alamat', 'telepon', 'email', 'penanggung_jawab', 'status',
+        'user_id', 'nama_perusahaan', 'alamat', 'telepon', 'email', 'penanggung_jawab', 'status', 'kuota',
         'created_at', 'updated_at',
     ];
     protected $useTimestamps = true;

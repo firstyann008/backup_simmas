@@ -10,7 +10,7 @@ class CreateSiswaMigration extends Migration
     {
         $this->forge->dropTable('siswa', true);
         $this->forge->addField([
-            'id' => ['type' => 'SERIAL', 'null' => false],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'user_id' => ['type' => 'INT', 'null' => false],
             'nama' => ['type' => 'VARCHAR', 'constraint' => 255],
             'nis' => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],

@@ -7,9 +7,27 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
-    body {
-      background-color: #f8f9fa;
+    :root { --brand-600:#1e7e71; --brand-700:#18665c; --brand-50:#e6f4f3; --bg-surface:#f7faf9; --border-color:#d7e3e1; }
+    
+    /* Ensure number input is fully editable */
+    #gval {
+      pointer-events: auto !important;
+      user-select: auto !important;
+      -webkit-user-select: auto !important;
+      -moz-user-select: auto !important;
+      -ms-user-select: auto !important;
     }
+    
+    #gval::-webkit-outer-spin-button,
+    #gval::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    #gval[type=number] {
+      -moz-appearance: textfield;
+    }
+    body { background-color: var(--bg-surface); }
     
     .main-content {
       background-color: #ffffff;
@@ -30,10 +48,327 @@
       box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
     
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: #198754;
+    .stat-number { font-size: 2.5rem; font-weight: bold; color: var(--brand-600); }
+    
+    /* DUDI List Styling */
+    .dudi-list {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+    
+    .dudi-item {
+      border-bottom: 1px solid #e9ecef;
+      padding: 1.5rem;
+      transition: background-color 0.2s ease;
+    }
+    
+    .dudi-item:last-child {
+      border-bottom: none;
+    }
+    
+    .dudi-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .dudi-company {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .dudi-company-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    
+    .dudi-company-info h6 {
+      font-weight: 600;
+      color: #212529;
+      margin-bottom: 0.25rem;
+    }
+    
+    .dudi-company-info .text-muted {
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    
+    .dudi-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .dudi-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .dudi-contact-item i {
+      width: 16px;
+      color: #6c757d;
+    }
+    
+    .dudi-responsible {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .dudi-responsible i {
+      width: 16px;
+      color: #6c757d;
+    }
+    
+    .dudi-students {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .dudi-students-badge {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    /* Modern Dashboard Styling */
+    .stat-card-modern {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      border: 1px solid #f1f3f4;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .stat-card-modern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      flex-shrink: 0;
+    }
+    
+    .stat-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #212529;
+      line-height: 1;
+      margin: 0;
+    }
+    
+    /* Ensure equal height for stats cards */
+    .row.g-4 {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .row.g-4 > [class*="col-"] {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Responsive adjustments for stats cards */
+    @media (max-width: 768px) {
+      .stat-card-modern {
+        padding: 0.875rem;
+      }
+      
+      .stat-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .stat-value {
+        font-size: 1.5rem;
+      }
+      
+      .stat-label {
+        font-size: 0.7rem;
+        margin-bottom: 0.375rem;
+      }
+    }
+    
+    .content-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    
+    .modern-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .modern-list-item {
+      padding: 1rem;
+      border-bottom: 1px solid #f1f3f4;
+      transition: background-color 0.2s ease;
+    }
+    
+    .modern-list-item:last-child {
+      border-bottom: none;
+    }
+    
+    .modern-list-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    /* Modern Search Styling */
+    .modern-search .input-group-text {
+      border-right: none;
+    }
+    
+    .modern-search .form-control:focus {
+      border-color: #28a745;
+      box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    }
+    
+    /* Modern Table Styling */
+    .modern-table {
+      border-radius: 0;
+    }
+    
+    .modern-table thead th {
+      background-color: rgba(40, 167, 69, 0.1) !important;
+      border-bottom: 2px solid rgba(40, 167, 69, 0.2);
+      padding: 1rem 0.75rem;
+    }
+    
+    .modern-table tbody tr {
+      transition: all 0.2s ease;
+      border-bottom: 1px solid #f1f3f4;
+    }
+    
+    .modern-table tbody tr:hover {
+      background-color: rgba(40, 167, 69, 0.05);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modern-table tbody td {
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+    }
+    
+    .table-opacity-10 {
+      background-color: rgba(40, 167, 69, 0.1) !important;
+    }
+    
+    /* Logbook Content Styling */
+    .logbook-content {
+      max-width: 300px;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    
+    .logbook-feedback {
+      max-width: 200px;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    
+    .modern-table td {
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+    }
+    
+    /* Table column widths for better layout */
+    .modern-table {
+      table-layout: fixed;
+      width: 100%;
+      min-width: 1000px;
+    }
+    
+    .modern-table td:nth-child(1) { width: 60px; min-width: 60px; }
+    .modern-table td:nth-child(2) { width: 200px; min-width: 200px; }
+    .modern-table td:nth-child(3) { width: 300px; min-width: 300px; }
+    .modern-table td:nth-child(4) { width: 200px; min-width: 200px; }
+    .modern-table td:nth-child(5) { width: 120px; min-width: 120px; }
+    .modern-table td:nth-child(6) { width: 200px; min-width: 200px; }
+    .modern-table td:nth-child(7) { width: 100px; min-width: 100px; }
+    
+    .table-responsive {
+      overflow-x: auto;
+    }
+    
+    .modern-table td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .modern-table td:nth-child(3),
+    .modern-table td:nth-child(4),
+    .modern-table td:nth-child(6) {
+      overflow: visible;
+      text-overflow: initial;
+    }
+    
+    .student-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
     }
     
     .info-panel {
@@ -44,13 +379,7 @@
       box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
     
-    .welcome-section {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-      color: white;
-      border-radius: 0.75rem;
-      padding: 2rem;
-      margin-bottom: 2rem;
-    }
+    .welcome-section { background: linear-gradient(135deg, var(--brand-600), var(--brand-700)); color:#fff; border-radius:.75rem; padding:2rem; margin-bottom:2rem; }
   </style>
 </head>
 <body>
@@ -65,74 +394,256 @@
       
       <!-- Dashboard Content -->
       <div class="main-content p-4">
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-          <h2>Dashboard Guru</h2>
-          <p>Selamat datang di panel guru pembimbing magang siswa.</p>
-        </div>
         <div class="container py-4">
   <div class="tab-content">
     <div class="tab-pane fade show active" id="tab-dashboard">
-      <div class="row g-3 mb-3">
-        <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Total Siswa</div><div class="value" id="stat-total">-</div></div></div>
-        <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">DUDI Partner</div><div class="value" id="stat-dudi">-</div></div></div>
-        <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Siswa Magang</div><div class="value" id="stat-aktif">-</div></div></div>
-        <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Logbook Hari Ini</div><div class="value" id="stat-logbook">-</div></div></div>
+      <!-- Welcome Header -->
+      <div class="card border-0 shadow-sm mb-4" style="background: #2D807B;">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h2 class="mb-1 fw-bold text-white">Dashboard Guru</h2>
+              <p class="text-white mb-0 opacity-90">Selamat datang di panel guru pembimbing magang siswa</p>
       </div>
-      <div class="row g-3">
-        <div class="col-lg-7">
-          <div class="card p-3">
-            <div class="fw-semibold mb-2">Magang Terbaru</div>
-            <div id="list-magang" class="vstack gap-2"></div>
+            <div class="d-flex align-items-center">
+              <i class="fas fa-chart-line text-white me-2" style="font-size: 1.5rem;"></i>
+              <span class="text-white opacity-90">Overview</span>
           </div>
-          <div class="card p-3 mt-3">
-            <div class="fw-semibold mb-2">Logbook Terbaru</div>
-            <div id="list-logbook" class="vstack gap-2"></div>
           </div>
         </div>
+          </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stat-card-modern">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                  <i class="fas fa-users"></i>
+        </div>
+                <div>
+                  <div class="stat-label text-muted small">Total Siswa Bimbingan</div>
+                  <div class="stat-value text-success fw-bold" id="stat-total"><?= $stats['total_siswa_bimbingan'] ?? 0 ?></div>
+      </div>
+    </div>
+      </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stat-card-modern">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                <div class="stat-icon bg-info bg-opacity-10 text-info me-3">
+                  <i class="fas fa-briefcase"></i>
+          </div>
+                <div>
+                  <div class="stat-label text-muted small">Magang Aktif</div>
+                  <div class="stat-value text-info fw-bold" id="stat-dudi"><?= $stats['total_magang_aktif'] ?? 0 ?></div>
+        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stat-card-modern">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div>
+                  <div class="stat-label text-muted small">Total Logbook</div>
+                  <div class="stat-value text-warning fw-bold" id="stat-aktif"><?= $stats['total_logbook'] ?? 0 ?></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card border-0 shadow-sm stat-card-modern">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center">
+                <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                  <i class="fas fa-calendar-day"></i>
+                </div>
+                <div>
+                  <div class="stat-label text-muted small">Logbook Hari Ini</div>
+                  <div class="stat-value text-primary fw-bold" id="stat-logbook">0</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Content Cards -->
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <!-- Siswa Bimbingan Card -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-0 pb-0">
+              <div class="d-flex align-items-center">
+                <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+                  <i class="fas fa-users"></i>
+          </div>
+                <div>
+                  <h5 class="mb-0 fw-bold text-dark">Siswa Bimbingan</h5>
+                  <small class="text-muted">Daftar siswa yang sedang dibimbing</small>
+          </div>
+        </div>
+            </div>
+            <div class="card-body pt-3">
+              <div id="list-magang" class="modern-list">
+                <?php if (!empty($siswa_bimbingan)): ?>
+                  <?php foreach ($siswa_bimbingan as $siswa): ?>
+                    <div class="modern-list-item">
+                      <div class="d-flex align-items-center">
+                        <div class="student-avatar bg-success bg-opacity-10 text-success me-3">
+                          <i class="fas fa-user"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                          <div class="fw-semibold text-dark"><?= $siswa['siswa_name'] ?? '-' ?></div>
+                          <div class="small text-muted"><?= $siswa['nama_perusahaan'] ?? '-' ?></div>
+                          <div class="small text-muted">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            <?= date('d/m/Y', strtotime($siswa['tanggal_mulai'])) ?> - <?= date('d/m/Y', strtotime($siswa['tanggal_selesai'])) ?>
+                          </div>
+                        </div>
+                        <span class="badge bg-success"><?= $siswa['status'] ?? '-' ?></span>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <div class="text-center py-4">
+                    <i class="fas fa-users fa-3x text-muted opacity-50 mb-3"></i>
+                    <div class="text-muted">Tidak ada siswa bimbingan</div>
+                  </div>
+                <?php endif; ?>
+          </div>
+        </div>
+      </div>
+
+          <!-- Logbook Terbaru Card -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pb-0">
+              <div class="d-flex align-items-center">
+                <div class="content-icon bg-warning bg-opacity-10 text-warning me-3">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-bold text-dark">Logbook Terbaru</h5>
+                  <small class="text-muted">Jurnal harian siswa terbaru</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-3">
+              <div id="list-logbook" class="modern-list"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="col-lg-5">
-          <div class="card p-3">
-            <div class="fw-semibold mb-2">DUDI Aktif</div>
-            <div id="list-dudi" class="vstack gap-2"></div>
+          <!-- DUDI Aktif Card -->
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pb-0">
+              <div class="d-flex align-items-center">
+                <div class="content-icon bg-info bg-opacity-10 text-info me-3">
+                  <i class="fas fa-building"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-bold text-dark">DUDI Aktif</h5>
+                  <small class="text-muted">Perusahaan tempat magang siswa</small>
+                </div>
+              </div>
+            </div>
+            <div class="card-body pt-3">
+              <div id="list-dudi" class="modern-list"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div class="tab-pane" id="tab-logbook">
-      <!-- Statacards untuk Jurnal Harian -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-3">
-          <div class="card p-3 stat-card">
-            <div class="label">Total Logbook</div>
-            <div class="value" id="logbook-total">-</div>
+      <div class="container-fluid px-4">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="d-flex align-items-center">
+            <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+              <i class="fas fa-book"></i>
+            </div>
+            <div>
+              <h4 class="mb-0 fw-bold text-dark">Jurnal Harian</h4>
+              <small class="text-muted">Verifikasi dan kelola logbook siswa</small>
+            </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card p-3 stat-card">
-            <div class="label">Belum Diverifikasi</div>
-            <div class="value" id="logbook-pending">-</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card p-3 stat-card">
-            <div class="label">Disetujui</div>
-            <div class="value" id="logbook-approved">-</div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card p-3 stat-card">
-            <div class="label">Ditolak</div>
-            <div class="value" id="logbook-rejected">-</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Filter dan Pencarian -->
-      <div class="card p-3 mb-3">
+        <!-- Modern Stats Cards -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                <i class="fas fa-book-open"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Total Logbook</div>
+                <div class="stat-value" id="logbook-total">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Belum Diverifikasi</div>
+                <div class="stat-value" id="logbook-pending">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Disetujui</div>
+                <div class="stat-value" id="logbook-approved">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-danger bg-opacity-10 text-danger">
+                <i class="fas fa-times-circle"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Ditolak</div>
+                <div class="stat-value" id="logbook-rejected">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modern Filter Section -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 pb-0">
+            <div class="d-flex align-items-center">
+              <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+                <i class="fas fa-filter"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold text-dark">Filter & Pencarian</h5>
+                <small class="text-muted">Saring dan cari data logbook</small>
+              </div>
+            </div>
+          </div>
+          <div class="card-body pt-3">
         <div class="row g-3">
           <div class="col-md-3">
-            <label class="form-label">Status</label>
-            <select id="fstatus" class="form-select">
+                <label class="form-label fw-semibold text-dark">Status</label>
+                <select id="fstatus" class="form-select border-success border-opacity-25">
           <option value="">Semua Status</option>
           <option value="pending">Pending</option>
           <option value="disetujui">Disetujui</option>
@@ -140,8 +651,8 @@
         </select>
       </div>
           <div class="col-md-3">
-            <label class="form-label">Bulan</label>
-            <select id="fmonth" class="form-select">
+                <label class="form-label fw-semibold text-dark">Bulan</label>
+                <select id="fmonth" class="form-select border-success border-opacity-25">
               <option value="">Semua Bulan</option>
               <option value="01">Januari</option>
               <option value="02">Februari</option>
@@ -158,30 +669,36 @@
             </select>
           </div>
           <div class="col-md-2">
-            <label class="form-label">Tahun</label>
-            <select id="fyear" class="form-select">
+                <label class="form-label fw-semibold text-dark">Tahun</label>
+                <select id="fyear" class="form-select border-success border-opacity-25">
               <option value="">Semua Tahun</option>
               <option value="2024">2024</option>
               <option value="2025">2025</option>
             </select>
           </div>
           <div class="col-md-2">
-            <label class="form-label">Tanggal Mulai</label>
-            <input id="fdate-start" type="date" class="form-control">
+                <label class="form-label fw-semibold text-dark">Tanggal Mulai</label>
+                <input id="fdate-start" type="date" class="form-control border-success border-opacity-25">
           </div>
           <div class="col-md-2">
-            <label class="form-label">Tanggal Akhir</label>
-            <input id="fdate-end" type="date" class="form-control">
+                <label class="form-label fw-semibold text-dark">Tanggal Akhir</label>
+                <input id="fdate-end" type="date" class="form-control border-success border-opacity-25">
           </div>
         </div>
-        <div class="row g-3 mt-2">
+            <div class="row g-3 mt-3">
           <div class="col-md-6">
-            <label class="form-label">Cari Siswa, Kegiatan, atau Kendala</label>
-            <input id="fsearch" type="text" class="form-control" placeholder="Cari siswa, kegiatan, atau kendala...">
+                <label class="form-label fw-semibold text-dark">Pencarian</label>
+                <div class="input-group modern-search">
+                  <span class="input-group-text bg-success bg-opacity-10 border-success border-opacity-25">
+                    <i class="fas fa-search text-success"></i>
+                  </span>
+                  <input id="fsearch" type="text" class="form-control border-success border-opacity-25" 
+                         placeholder="Cari siswa, kegiatan, atau kendala..." style="border-left: none;">
+                </div>
           </div>
           <div class="col-md-3">
-            <label class="form-label">Tampilkan per Halaman</label>
-            <select id="fperpage" class="form-select">
+                <label class="form-label fw-semibold text-dark">Tampilkan per Halaman</label>
+                <select id="fperpage" class="form-select border-success border-opacity-25">
               <option value="10">10 per halaman</option>
               <option value="25">25 per halaman</option>
               <option value="50">50 per halaman</option>
@@ -189,122 +706,252 @@
             </select>
           </div>
           <div class="col-md-3 d-flex align-items-end">
-            <button class="btn btn-primary me-2" onclick="loadLogbooks()">Tampilkan Filter</button>
-            <button class="btn btn-outline-secondary" onclick="resetLogbookFilters()">Reset</button>
+                <div class="d-flex gap-2 w-100">
+                  <button class="btn btn-success flex-fill" onclick="loadLogbooks()">
+                    <i class="fas fa-search me-1"></i>Filter
+                  </button>
+                  <button class="btn btn-outline-secondary" onclick="resetLogbookFilters()">
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
+                </div>
+              </div>
           </div>
         </div>
       </div>
 
-      <!-- Tabel Logbook -->
-      <div class="card p-3">
+        <!-- Modern Logbook Table -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 pb-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+                  <i class="fas fa-list"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-bold text-dark">Daftar Logbook</h5>
+                  <small class="text-muted">Data jurnal harian siswa</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-striped align-middle">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Siswa & Tanggal</th>
-                <th>Kegiatan</th>
-                <th>Kendala</th>
-                <th>Status</th>
-                <th>Catatan Guru</th>
-                <th>Aksi</th>
+              <table class="table table-hover mb-0 modern-table">
+                <thead class="table-success table-opacity-10">
+                  <tr>
+                    <th class="border-0 fw-semibold text-dark">#</th>
+                    <th class="border-0 fw-semibold text-dark">Siswa & Tanggal</th>
+                    <th class="border-0 fw-semibold text-dark">Kegiatan</th>
+                    <th class="border-0 fw-semibold text-dark">Kendala</th>
+                    <th class="border-0 fw-semibold text-dark">Status</th>
+                    <th class="border-0 fw-semibold text-dark">Catatan Guru</th>
+                    <th class="border-0 fw-semibold text-dark text-center">Aksi</th>
               </tr>
             </thead>
-          <tbody id="grows"></tbody>
+                <tbody id="grows">
+                  <tr>
+                    <td colspan="7" class="text-center py-5">
+                      <div class="d-flex flex-column align-items-center">
+                        <i class="fas fa-spinner fa-spin fa-2x text-success mb-3"></i>
+                        <div class="text-muted">Memuat data...</div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
         </table>
-        </div>
-        
-        <!-- Pagination -->
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <div class="text-muted">
-            Menampilkan <span id="logbook-showing-start">0</span> sampai <span id="logbook-showing-end">0</span> dari <span id="logbook-total-records">0</span> entri
+            </div>
           </div>
-          <nav>
-            <ul class="pagination pagination-sm mb-0" id="logbook-pagination">
-              <!-- Pagination buttons will be generated here -->
-            </ul>
-          </nav>
+          <div class="card-footer bg-white border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <div id="logbook-pagination-info" class="text-muted small fw-semibold">Menampilkan 0 sampai 0 dari 0 entri</div>
+              <nav>
+                <ul class="pagination pagination-sm mb-0" id="logbook-pagination"></ul>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="tab-pane" id="tab-dudi">
       <div class="container-fluid px-0">
-        <div class="row g-3 mb-3">
-          <div class="col-md-4"><div class="card p-3 stat-card"><div class="label">Total DUDI</div><div class="value" id="gd-total-dudi">-</div></div></div>
-          <div class="col-md-4"><div class="card p-3 stat-card"><div class="label">Total Siswa Magang</div><div class="value" id="gd-total-siswa">-</div></div></div>
-          <div class="col-md-4"><div class="card p-3 stat-card"><div class="label">Rata-rata Siswa</div><div class="value" id="gd-avg">-</div></div></div>
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-building text-success me-3" style="font-size: 1.5rem;"></i>
+            <h4 class="mb-0 fw-bold text-dark">Daftar DUDI</h4>
         </div>
-        <div class="card p-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="input-group" style="max-width:420px;">
-              <input id="gd-q" class="form-control" placeholder="Cari perusahaan, alamat, penanggung jawab...">
-              <button class="btn btn-outline-secondary" onclick="loadDudiGuru()">Cari</button>
+            </div>
+
+        <!-- Search and Pagination Controls -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="input-group" style="max-width: 500px;">
+            <span class="input-group-text bg-white border-end-0">
+              <i class="fas fa-search text-muted"></i>
+            </span>
+            <input id="gd-q" class="form-control border-start-0" placeholder="Cari perusahaan, alamat, penanggung jawab..." onkeyup="if(event.key==='Enter') loadDudiGuru()">
+          </div>
+          <div class="d-flex align-items-center">
+            <span class="text-muted me-2">Tampilkan:</span>
+            <select id="gd-perpage" class="form-select" style="width: 80px;" onchange="loadDudiGuru()">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+            <span class="text-muted ms-2">per halaman</span>
+          </div>
+        </div>
+
+        <!-- DUDI List -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-body p-0">
+            <div id="gd-rows" class="dudi-list">
+              <!-- DUDI items will be loaded here -->
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped align-middle">
-              <thead>
-                <tr>
-                  <th>Perusahaan</th>
-                  <th>Kontak</th>
-                  <th>Penanggung Jawab</th>
-                  <th>Siswa Magang</th>
-                </tr>
-              </thead>
-              <tbody id="gd-rows"></tbody>
-            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <div class="text-muted">
+            Menampilkan <span id="gd-showing-start">0</span> - <span id="gd-showing-end">0</span> dari <span id="gd-total-records">0</span> DUDI
           </div>
+          <nav>
+            <ul id="gd-pagination" class="pagination pagination-sm mb-0">
+              <!-- Pagination buttons will be loaded here -->
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
     <div class="tab-pane" id="tab-magang">
-      <div class="container-fluid px-0">
-        <div class="row g-3 mb-3">
-          <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Total</div><div class="value" id="im-total">-</div></div></div>
-          <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Aktif</div><div class="value" id="im-aktif">-</div></div></div>
-          <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Selesai</div><div class="value" id="im-selesai">-</div></div></div>
-          <div class="col-md-3"><div class="card p-3 stat-card"><div class="label">Pending</div><div class="value" id="im-pending">-</div></div></div>
+      <div class="container-fluid px-4">
+        <!-- Header Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="d-flex align-items-center">
+            <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+              <i class="fas fa-briefcase"></i>
         </div>
-        <div class="card p-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="input-group" style="max-width:420px;">
-              <input id="im-q" class="form-control" placeholder="Cari siswa, guru, atau DUDI...">
-              <button class="btn btn-outline-secondary" onclick="loadInternships()">Cari</button>
-            </div>
-          <button class="btn btn-primary" onclick="openCreateInternship()">+ Tambah</button>
             <div>
-              <select id="im-status" class="form-select" style="width:180px" onchange="loadInternships()">
+              <h4 class="mb-0 fw-bold text-dark">Manajemen Magang</h4>
+              <small class="text-muted">Kelola data penempatan magang siswa</small>
+            </div>
+          </div>
+          <button class="btn btn-success" onclick="openCreateInternship()">
+            <i class="fas fa-plus me-2"></i>Tambah Magang
+          </button>
+          </div>
+
+        <!-- Modern Stats Cards -->
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                <i class="fas fa-users"></i>
+        </div>
+              <div class="stat-content">
+                <div class="stat-label">Total Magang</div>
+                <div class="stat-value" id="im-total">-</div>
+      </div>
+    </div>
+        </div>
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-success bg-opacity-10 text-success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+              <div class="stat-content">
+                <div class="stat-label">Aktif</div>
+                <div class="stat-value" id="im-aktif">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-info bg-opacity-10 text-info">
+                <i class="fas fa-graduation-cap"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Selesai</div>
+                <div class="stat-value" id="im-selesai">-</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-3">
+            <div class="stat-card-modern">
+              <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="stat-content">
+                <div class="stat-label">Pending</div>
+                <div class="stat-value" id="im-pending">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white border-0 pb-0">
+            <div class="d-flex align-items-center">
+              <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+                <i class="fas fa-search"></i>
+              </div>
+            <div>
+                <h5 class="mb-0 fw-bold text-dark">Pencarian & Filter</h5>
+                <small class="text-muted">Cari dan filter data magang</small>
+              </div>
+            </div>
+          </div>
+          <div class="card-body pt-3">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="input-group modern-search">
+                  <span class="input-group-text bg-success bg-opacity-10 border-success border-opacity-25">
+                    <i class="fas fa-search text-success"></i>
+                  </span>
+                  <input type="text" id="im-q" class="form-control border-success border-opacity-25" 
+                         placeholder="Cari siswa, guru, atau DUDI..." style="border-left: none;">
+                </div>
+              </div>
+              <div class="col-md-3">
+                <select id="im-status" class="form-select border-success border-opacity-25" onchange="loadInternships()">
                 <option value="">Semua Status</option>
                 <option value="aktif">Aktif</option>
                 <option value="pending">Pending</option>
                 <option value="selesai">Selesai</option>
               </select>
             </div>
+              <div class="col-md-3">
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-success" onclick="loadInternships()">
+                    <i class="fas fa-search me-1"></i>Cari
+                  </button>
+                  <button class="btn btn-outline-secondary" onclick="resetMagangFilters()">
+                    <i class="fas fa-undo me-1"></i>Reset
+                  </button>
           </div>
-          <div class="table-responsive">
-            <table class="table table-striped align-middle">
-              <thead>
-                <tr>
-                  <th>Siswa</th>
-                  <th>Guru Pembimbing</th>
-                  <th>DUDI</th>
-                  <th>Periode</th>
-                  <th>Status</th>
-                  <th>Nilai</th>
-                  <th class="text-center">Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="im-rows"></tbody>
-            </table>
-            
-            <!-- Pagination -->
-            <div class="d-flex justify-content-between align-items-center mt-3">
-              <div class="text-muted">
-                Menampilkan <span id="im-start">1</span> sampai <span id="im-end">10</span> dari <span id="im-total-records">0</span> entri
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modern Magang List -->
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-0 pb-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="content-icon bg-success bg-opacity-10 text-success me-3">
+                  <i class="fas fa-list"></i>
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-bold text-dark">Daftar Magang</h5>
+                  <small class="text-muted">Data penempatan magang siswa</small>
+                </div>
               </div>
               <div class="d-flex align-items-center">
-                <span class="me-2">Tampilkan:</span>
-                <select id="im-per-page" class="form-select form-select-sm" style="width: auto;" onchange="loadInternships()">
+                <label class="form-label me-2 mb-0 fw-semibold text-dark">Tampilkan:</label>
+                <select id="im-per-page" class="form-select form-select-sm border-success border-opacity-25" style="width:auto;" onchange="loadInternships()">
                   <option value="5">5 per halaman</option>
                   <option value="10" selected>10 per halaman</option>
                   <option value="25">25 per halaman</option>
@@ -312,12 +959,41 @@
                 </select>
               </div>
             </div>
-            
-            <nav aria-label="Page navigation" class="mt-3">
-              <ul class="pagination justify-content-center" id="im-pagination">
-                <!-- Pagination will be generated by JavaScript -->
-              </ul>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 modern-table">
+                <thead class="table-success table-opacity-10">
+                  <tr>
+                    <th class="border-0 fw-semibold text-dark">Siswa</th>
+                    <th class="border-0 fw-semibold text-dark">Guru Pembimbing</th>
+                    <th class="border-0 fw-semibold text-dark">DUDI</th>
+                    <th class="border-0 fw-semibold text-dark">Periode</th>
+                    <th class="border-0 fw-semibold text-dark">Status</th>
+                    <th class="border-0 fw-semibold text-dark">Nilai</th>
+                    <th class="border-0 fw-semibold text-dark text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="im-rows">
+                  <tr>
+                    <td colspan="7" class="text-center py-5">
+                      <div class="d-flex flex-column align-items-center">
+                        <i class="fas fa-spinner fa-spin fa-2x text-success mb-3"></i>
+                        <div class="text-muted">Memuat data...</div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <div id="im-pagination-info" class="text-muted small fw-semibold">Menampilkan 0 sampai 0 dari 0 entri</div>
+              <nav>
+                <ul id="im-pagination" class="pagination pagination-sm mb-0"></ul>
             </nav>
+            </div>
           </div>
         </div>
       </div>
@@ -379,7 +1055,7 @@
           </div>
           <div class="mb-1">
           <label class="form-label">Nilai Akhir (0-100)</label>
-            <input id="gval" type="number" min="0" max="100" class="form-control" placeholder="Isi setelah status selesai">
+            <input id="gval" type="number" min="0" max="100" class="form-control" placeholder="Isi setelah status selesai" step="1" inputmode="numeric">
             <div class="form-text">Nilai hanya dapat diisi jika status magang selesai</div>
           </div>
         </div>
@@ -600,14 +1276,23 @@
 
     function showLogbook() {
       console.log('Showing Logbook');
+      
+      try {
       // Hide all tab panes
-      document.querySelectorAll('.tab-pane').forEach(pane => {
+        const allPanes = document.querySelectorAll('.tab-pane');
+        console.log('Found tab panes:', allPanes.length);
+        allPanes.forEach(pane => {
         pane.classList.remove('show', 'active');
+          console.log('Hiding pane:', pane.id);
       });
+        
       // Show logbook tab
       const logbookTab = document.getElementById('tab-logbook');
       if (logbookTab) {
         logbookTab.classList.add('show', 'active');
+          console.log('Showing logbook tab');
+        } else {
+          console.error('Logbook tab not found!');
       }
       
       // Load logbook data with delay to ensure DOM is ready
@@ -619,6 +1304,9 @@
       
       // Update active nav
       updateActiveNav('logbook');
+      } catch (error) {
+        console.error('Error in showLogbook:', error);
+      }
     }
 
     // Update active nav state
@@ -644,27 +1332,35 @@
     function handleMenuClick(menuName) {
       console.log('Menu clicked:', menuName);
       
+      try {
       switch(menuName.toLowerCase()) {
         case 'sec-dashboard':
         case 'dashboard':
+            console.log('Switching to Dashboard');
           showDashboard();
           break;
         case 'sec-dudi':
         case 'dudi':
+            console.log('Switching to DUDI');
           showDudi();
           break;
         case 'sec-magang':
         case 'magang':
+            console.log('Switching to Magang');
           showMagang();
           break;
         case 'sec-logbook':
         case 'jurnal harian':
         case 'logbook':
+            console.log('Switching to Logbook');
           showLogbook();
           break;
         default:
           console.log('Unknown menu:', menuName);
           showDashboard();
+        }
+      } catch (error) {
+        console.error('Error in handleMenuClick:', error);
       }
     }
 
@@ -720,6 +1416,21 @@
     
     // Set today's date - element not found, skipping
     // document.getElementById('today').innerText=todayText();
+    
+    // Ensure nilai input is always editable when modal opens
+    const gradeModal = document.getElementById('mGrade');
+    if (gradeModal) {
+      gradeModal.addEventListener('shown.bs.modal', function() {
+        const nilaiInput = document.getElementById('gval');
+        if (nilaiInput) {
+          nilaiInput.removeAttribute('readonly');
+          nilaiInput.removeAttribute('disabled');
+          nilaiInput.style.pointerEvents = 'auto';
+          nilaiInput.style.userSelect = 'auto';
+          nilaiInput.focus();
+        }
+      });
+    }
 
     // Toast notification function
     function toast(message, type = 'info') {
@@ -771,13 +1482,8 @@ async function loadGuruStats(){
     const rg=await fetch('/api/guru/stats/global',{headers:{Authorization:'Bearer '+t}}); 
     let g;
     if (!rg.ok) {
-      console.log('Global stats API failed, using fallback data');
-      g = {
-        total_siswa: 1,
-        total_dudi: 3,
-        magang_aktif: 1,
-        logbook_hari_ini: 0
-      };
+      console.log('Global stats API failed. Status:', rg.status);
+      g = { total_siswa: 0, total_dudi: 0, total_magang: 0 };
     } else {
       g = await rg.json();
     }
@@ -791,143 +1497,92 @@ async function loadGuruStats(){
     const rs=await fetch('/api/guru/stats',{headers:{Authorization:'Bearer '+t}}); 
     let s;
     if (!rs.ok) {
-      console.log('Guru stats API failed, using fallback data');
-      
-      // Get user data to determine which fallback data to use
-      const userData = JSON.parse(localStorage.getItem('simmas_user') || '{}');
-      console.log('Current user for dashboard stats:', userData);
-      
-      // Different fallback data based on user
-      if (userData.name === 'Pak Hendro') {
-        s = {
-          magang_terbaru: [
-            {
-              siswa_nama: 'Budi',
-              dudi_nama: 'CV Digital Solusi',
-              tanggal_mulai: '2025-09-01',
-              tanggal_selesai: '2025-09-30',
-              status: 'aktif'
-            },
-            {
-              siswa_nama: 'Lala',
-              dudi_nama: 'PT Pusat Madiun',
-              tanggal_mulai: '2025-09-01',
-              tanggal_selesai: '2025-09-30',
-              status: 'aktif'
-            }
-          ],
-          logbook_terbaru: [
-            {
-              siswa_nama: 'Budi',
-              tanggal: '2025-09-28',
-              dudi_nama: 'CV Digital Solusi',
-              kegiatan: 'Jenis file yang dapat diupload: Screenshot hasil kerja, dokumentasi code, foto kegiatan',
-              status_verifikasi: 'pending'
-            },
-            {
-              siswa_nama: 'Budi',
-              tanggal: '2025-09-27',
-              dudi_nama: 'CV Digital Solusi',
-              kegiatan: 'Ini adalah contoh laporan jurnal harian siswa magang',
-              status_verifikasi: 'disetujui'
-            }
-          ]
-        };
-      } else if (userData.name === 'Pak Yanto') {
-        // Fallback data for Pak Yanto - siswa yang dibimbing Rudi, Dodi, dan Lulu
-        s = {
-          magang_terbaru: [
-            {
-              siswa_nama: 'Rudi',
-              dudi_nama: 'PT Kreatif Teknologi',
-              tanggal_mulai: '2025-09-01',
-              tanggal_selesai: '2025-09-30',
-              status: 'aktif'
-            },
-            {
-              siswa_nama: 'Dodi',
-              dudi_nama: 'PT Pusat Madiun',
-              tanggal_mulai: '2025-09-01',
-              tanggal_selesai: '2025-09-30',
-              status: 'aktif'
-            },
-            {
-              siswa_nama: 'Lulu',
-              dudi_nama: 'PT Pusat Madiun',
-              tanggal_mulai: '2025-09-01',
-              tanggal_selesai: '2025-09-30',
-              status: 'aktif'
-            }
-          ],
-          logbook_terbaru: [
-            {
-              siswa_nama: 'Rudi',
-              tanggal: '2025-09-27',
-              dudi_nama: 'PT Kreatif Teknologi',
-              kegiatan: 'ini adalaha contoh laporan jurnal harian siswa magang',
-              status_verifikasi: 'pending'
-            },
-            {
-              siswa_nama: 'Dodi',
-              tanggal: '2025-09-26',
-              dudi_nama: 'PT Kreatif Teknologi',
-              kegiatan: 'Mempelajari sistem database dan melakukan backup data harian',
-              status_verifikasi: 'disetujui'
-            }
-          ]
-        };
-      } else {
-        // Default fallback for new guru accounts (e.g., Pak Luki) - no students assigned yet
-        s = {
-          magang_terbaru: [],
-          logbook_terbaru: []
-        };
-      }
+      console.log('Guru stats API failed. Status:', rs.status);
+      s = { magang_terbaru: [], logbook_terbaru: [] };
     } else {
       s = await rs.json();
     }
         const lm=document.getElementById('list-magang'); 
         lm.innerHTML='';
+        if((s.magang_terbaru||[]).length > 0) {
         (s.magang_terbaru||[]).forEach(m=>{ 
           const periode = (m.tanggal_mulai?m.tanggal_mulai:'?') + ' / ' + (m.tanggal_selesai?m.tanggal_selesai:'?');
           const status = m.status||'';
           const div=document.createElement('div'); 
-          div.className='list-item'; 
-          div.innerHTML=`<div class="d-flex justify-content-between">
-            <div>
-              <div class="fw-semibold">${m.siswa_nama||'-'}</div>
-              <div class="small text-muted">${m.dudi_nama||'-'} • ${periode}</div>
+            div.className='modern-list-item'; 
+            div.innerHTML=`<div class="d-flex align-items-center">
+              <div class="student-avatar bg-success bg-opacity-10 text-success me-3">
+                <i class="fas fa-user"></i>
             </div>
-            <span class="badge ${status==='aktif'?'bg-success':(status==='selesai'?'bg-secondary':'bg-warning text-dark')} align-self-start">${status}</span>
+              <div class="flex-grow-1">
+                <div class="fw-semibold text-dark">${m.siswa_nama||'-'}</div>
+                <div class="small text-muted">${m.dudi_nama||'-'}</div>
+                <div class="small text-muted">
+                  <i class="fas fa-calendar-alt me-1"></i>
+                  ${periode}
+                </div>
+              </div>
+              <span class="badge ${status==='aktif'?'bg-success':(status==='selesai'?'bg-secondary':'bg-warning text-dark')}">${status}</span>
           </div>`; 
           lm.appendChild(div); 
         });
+        } else {
+          lm.innerHTML='<div class="text-center py-4"><i class="fas fa-users fa-3x text-muted opacity-50 mb-3"></i><div class="text-muted">Tidak ada siswa bimbingan</div></div>';
+        }
         
         const ld=document.getElementById('list-dudi'); 
         ld.innerHTML='';
+        if((g.dudi_aktif_list||[]).length > 0) {
         (g.dudi_aktif_list||[]).forEach(d=>{ 
           const div=document.createElement('div'); 
-          div.className='list-item d-flex justify-content-between'; 
-          div.innerHTML=`<div><div class="fw-semibold">${d.nama_perusahaan}</div><div class="small text-muted">${d.alamat||''} ${d.telepon?(' • '+d.telepon):''}</div></div><span class="badge bg-primary align-self-center">${d.jumlah_siswa||0} siswa</span>`; 
+            div.className='modern-list-item'; 
+            div.innerHTML=`<div class="d-flex align-items-center">
+              <div class="student-avatar bg-info bg-opacity-10 text-info me-3">
+                <i class="fas fa-building"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="fw-semibold text-dark">${d.nama_perusahaan}</div>
+                <div class="small text-muted">${d.alamat||''}</div>
+                <div class="small text-muted">
+                  <i class="fas fa-phone me-1"></i>
+                  ${d.telepon||'-'}
+                </div>
+              </div>
+              <span class="badge bg-info">${d.jumlah_siswa||0} siswa</span>
+            </div>`; 
           ld.appendChild(div); 
         });
+        } else {
+          ld.innerHTML='<div class="text-center py-4"><i class="fas fa-building fa-3x text-muted opacity-50 mb-3"></i><div class="text-muted">Tidak ada DUDI aktif</div></div>';
+        }
         
         const ll=document.getElementById('list-logbook'); 
         if(ll){ 
           ll.innerHTML=''; 
+          if((s.logbook_terbaru||[]).length > 0) {
           (s.logbook_terbaru||[]).forEach(l=>{ 
             const div=document.createElement('div'); 
-            div.className='list-item'; 
-            div.innerHTML=`<div class="d-flex justify-content-between">
-              <div>
-                <div class="fw-semibold">${l.siswa_nama||'-'}</div>
-                <div class="small text-muted">${l.tanggal||''} • ${l.dudi_nama||'-'}</div>
-                <div class="small">${l.kegiatan||''}</div>
+              div.className='modern-list-item'; 
+              div.innerHTML=`<div class="d-flex align-items-center">
+                <div class="student-avatar bg-warning bg-opacity-10 text-warning me-3">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="flex-grow-1">
+                  <div class="fw-semibold text-dark">${l.siswa_nama||'-'}</div>
+                  <div class="small text-muted">${l.dudi_nama||'-'}</div>
+                  <div class="small text-muted">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    ${l.tanggal||''}
+                  </div>
+                  <div class="small text-truncate" style="max-width: 200px;" title="${l.kegiatan||''}">${l.kegiatan||''}</div>
               </div>
               <span class="badge ${l.status_verifikasi==='disetujui'?'bg-success':(l.status_verifikasi==='ditolak'?'bg-danger':'bg-warning text-dark')}">${l.status_verifikasi||'pending'}</span>
             </div>`; 
             ll.appendChild(div); 
           }); 
+          } else {
+            ll.innerHTML='<div class="text-center py-4"><i class="fas fa-book fa-3x text-muted opacity-50 mb-3"></i><div class="text-muted">Tidak ada logbook terbaru</div></div>';
+          }
         }
         
         // duplicate into DUDI & Magang tabs
@@ -971,35 +1626,9 @@ async function loadDudiGuru(){
   try{ 
     const rs=await fetch('/api/guru/dudi/stats',{headers:{Authorization:'Bearer '+t}}); 
     let st;
-    // Force fallback stats for testing - comment out this line when API is ready
     if (!rs.ok) {
-      console.log('DUDI stats API failed, using fallback data');
-      
-      // Get user data to determine which fallback stats to use
-      const userData = JSON.parse(localStorage.getItem('simmas_user') || '{}');
-      console.log('Current user for DUDI stats:', userData);
-      
-      // Different fallback stats based on user
-      if (userData.name === 'Pak Hendro') {
-        st = {
-          total_dudi: 2,
-          total_siswa_magang: 2,
-          rata_rata_siswa: '1.00'
-        };
-      } else if (userData.name === 'Pak Yanto') {
-        st = {
-          total_dudi: 2,
-          total_siswa_magang: 3,
-          rata_rata_siswa: '1.50'
-        };
-      } else {
-        // Default fallback for new guru accounts - no data yet
-        st = {
-          total_dudi: 0,
-          total_siswa_magang: 0,
-          rata_rata_siswa: '0.00'
-        };
-      }
+      console.log('DUDI stats API failed. Status:', rs.status);
+      st = { total_dudi: 0, total_siswa_magang: 0, rata_rata_siswa: '0.00' };
     } else {
       st = await rs.json();
     }
@@ -1013,75 +1642,64 @@ async function loadDudiGuru(){
     
     const r=await fetch('/api/guru/dudi'+(q?'?q='+encodeURIComponent(q):''),{headers:{Authorization:'Bearer '+t}}); 
     let rows;
-    // Force fallback data for testing - comment out this line when API is ready
     if (!r.ok) {
-      console.log('DUDI data API failed, using fallback data');
-      
-      // Get user data to determine which fallback data to use
-      const userData = JSON.parse(localStorage.getItem('simmas_user') || '{}');
-      console.log('Current user for DUDI data:', userData);
-      
-      // Different fallback data based on user
-      if (userData.name === 'Pak Hendro') {
-        rows = [
-          {
-            nama_perusahaan: 'CV Digital Solusi',
-            alamat: 'Jl. Sudirman No. 45, Surabaya',
-            email: 'contact@digitalsolusi.com',
-            telepon: '031-87654321',
-            penanggung_jawab: 'Sari Dewi',
-            jumlah_siswa: 1
-          },
-          {
-            nama_perusahaan: 'PT Pusat Madiun',
-            alamat: 'Madiun',
-            email: 'pusatmadiun@simma.test',
-            telepon: '089634567829',
-            penanggung_jawab: 'Jokowi Widodo',
-            jumlah_siswa: 1
-          }
-        ];
-      } else if (userData.name === 'Pak Yanto') {
-        // Fallback data for Pak Yanto
-        rows = [
-          {
-            nama_perusahaan: 'PT Kreatif Teknologi',
-            alamat: 'Jl. Merdeka No. 123, Jakarta',
-            email: 'info@kreatiftek.com',
-            telepon: '021-12345678',
-            penanggung_jawab: 'Andi Wijaya',
-            jumlah_siswa: 1
-          },
-          {
-            nama_perusahaan: 'PT Pusat Madiun',
-            alamat: 'Madiun',
-            email: 'pusatmadiun@simma.test',
-            telepon: '089634567829',
-            penanggung_jawab: 'Jokowi Widodo',
-            jumlah_siswa: 2
-          }
-        ];
-      } else {
-        // Default fallback for new guru accounts - no DUDI assigned yet
+      console.log('DUDI data API failed. Status:', r.status);
         rows = [];
-      }
     } else {
       rows = await r.json();
     }
     console.log('DUDI rows:', rows);
     
-    const tb=document.getElementById('gd-rows'); 
-    if(!tb) return; 
-    tb.innerHTML=''; 
+    const container=document.getElementById('gd-rows'); 
+    if(!container) return; 
+    container.innerHTML=''; 
     
     if(Array.isArray(rows)&&rows.length){ 
-      rows.forEach(d=>{ 
-        const tr=document.createElement('tr'); 
-        tr.innerHTML=`<td><div class="fw-semibold">${d.nama_perusahaan}</div><div class="small text-muted">${d.alamat||''}</div></td><td><div class="small">${d.email||'-'}</div><div class="small text-muted">${d.telepon||'-'}</div></td><td>${d.penanggung_jawab||'-'}</td><td><span class="badge bg-primary">${d.jumlah_siswa||0}</span></td>`; 
-        tb.appendChild(tr); 
+      rows.forEach((d, index)=>{ 
+        const item=document.createElement('div'); 
+        item.className='dudi-item';
+        item.innerHTML=`
+          <div class="row align-items-center">
+            <div class="col-md-4">
+              <div class="dudi-company">
+                <div class="dudi-company-icon">
+                  <i class="fas fa-building"></i>
+                </div>
+                <div class="dudi-company-info">
+                  <h6 class="mb-1">${d.nama_perusahaan||'-'}</h6>
+                  <div class="text-muted">${d.alamat||'-'}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="dudi-contact">
+                <div class="dudi-contact-item">
+                  <i class="fas fa-envelope"></i>
+                  <span>${d.email||'-'}</span>
+                </div>
+                <div class="dudi-contact-item">
+                  <i class="fas fa-phone"></i>
+                  <span>${d.telepon||'-'}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="dudi-responsible">
+                <i class="fas fa-user"></i>
+                <span>${d.penanggung_jawab||'-'}</span>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="dudi-students">
+                <span class="dudi-students-badge">${d.jumlah_siswa||0}</span>
+              </div>
+            </div>
+          </div>
+        `; 
+        container.appendChild(item); 
       }); 
     } else { 
-      tb.innerHTML='<tr><td colspan="4" class="text-center text-muted py-3">Tidak ada data</td></tr>'; 
+      container.innerHTML='<div class="text-center text-muted py-5"><i class="fas fa-building fa-3x mb-3 opacity-50"></i><div>Tidak ada data DUDI</div></div>'; 
     } 
   }catch(e){ 
     console.error('Error loading DUDI data:', e);
@@ -1119,58 +1737,10 @@ async function loadLogbooks(){
   
   let result;
   if (!res.ok) {
-    console.log('Logbook API failed, using fallback data. Status:', res.status);
+    console.log('Logbook API failed. Status:', res.status);
+    console.log('Response:', await res.text());
     
-    // Get user data to determine which fallback data to use
-    const userData = JSON.parse(localStorage.getItem('simmas_user') || '{}');
-    console.log('Current user:', userData);
-    
-    // Different fallback data based on user
-    if (userData.name === 'Pak Hendro') {
-      result = {
-        data: [
-          {
-            id: 1,
-            siswa_nama: 'Budi',
-            tanggal: '2025-09-27',
-            kegiatan: 'Ini adalah contoh laporan jurnal harian siswa magang',
-            kendala: '-',
-            status_verifikasi: 'disetujui',
-            catatan_guru: '-'
-          }
-        ],
-        pagination: {
-          showing_start: 1,
-          showing_end: 1,
-          total_records: 1,
-          current_page: 1,
-          total_pages: 1
-        }
-      };
-    } else if (userData.name === 'Pak Yanto') {
-      // Fallback data for Pak Yanto
-      result = {
-        data: [
-          {
-            id: 1,
-            siswa_nama: 'Rudi',
-            tanggal: '2025-09-27',
-            kegiatan: 'ini adalaha contoh laporan jurnal harian siswa magang',
-            kendala: 'Tidak ada kendala berarti',
-            status_verifikasi: 'pending',
-            catatan_guru: 'Belum ada catatan dari guru'
-          }
-        ],
-        pagination: {
-          showing_start: 1,
-          showing_end: 1,
-          total_records: 1,
-          current_page: 1,
-          total_pages: 1
-        }
-      };
-    } else {
-      // Default fallback for new guru accounts - no logbook data yet
+    // Show empty state when API fails
       result = {
         data: [],
         pagination: {
@@ -1181,7 +1751,6 @@ async function loadLogbooks(){
           total_pages: 0
         }
       };
-    }
   } else {
     result = await res.json();
   }
@@ -1192,82 +1761,17 @@ async function loadLogbooks(){
   console.log('Logbook data loaded:', data);
   console.log('Pagination:', pagination);
   
-  // If API returns empty data, use fallback data
-  if (data.length === 0) {
-    console.log('API returned empty data, using fallback data');
-    
-    // Get user data to determine which fallback data to use
-    const userData = JSON.parse(localStorage.getItem('simmas_user') || '{}');
-    console.log('Current user for empty data fallback:', userData);
-    
-    // Different fallback data based on user
-    if (userData.name === 'Pak Hendro') {
-      result = {
-        data: [
-          {
-            id: 1,
-            siswa_nama: 'Budi',
-            tanggal: '2025-09-27',
-            kegiatan: 'Ini adalah contoh laporan jurnal harian siswa magang',
-            kendala: '-',
-            status_verifikasi: 'disetujui',
-            catatan_guru: '-'
-          }
-        ],
-        pagination: {
-          showing_start: 1,
-          showing_end: 1,
-          total_records: 1,
-          current_page: 1,
-          total_pages: 1
-        }
-      };
-    } else {
-      // Default fallback for Pak Yanto and others - siswa yang dibimbing Rudi dan Dodi
-      result = {
-        data: [
-          {
-            id: 1,
-            siswa_nama: 'Rudi',
-            tanggal: '2025-09-27',
-            kegiatan: 'ini adalaha contoh laporan jurnal harian siswa magang',
-            kendala: 'Tidak ada kendala berarti',
-            status_verifikasi: 'pending',
-            catatan_guru: 'Belum ada catatan dari guru'
-          },
-          {
-            id: 2,
-            siswa_nama: 'Dodi',
-            tanggal: '2025-09-26',
-            kegiatan: 'Mempelajari sistem database dan melakukan backup data harian',
-            kendala: 'Kendala: Software design masih belum familiar',
-            status_verifikasi: 'disetujui',
-            catatan_guru: 'Kerja bagus, teruskan semangat belajar!'
-          }
-        ],
-        pagination: {
-          showing_start: 1,
-          showing_end: 2,
-          total_records: 2,
-          current_page: 1,
-          total_pages: 1
-        }
-      };
-    }
-    
-    // Update data and pagination with fallback
-    const fallbackData = result.data || [];
-    const fallbackPagination = result.pagination || {};
-    
-    console.log('Using fallback data:', fallbackData);
-    console.log('Using fallback pagination:', fallbackPagination);
-    
-    // Use fallback data
-    data.length = 0;
-    data.push(...fallbackData);
-    Object.assign(pagination, fallbackPagination);
-  }
+  // No fallback data - use real data from database only
   
+  // Use shared rendering function
+  renderLogbookTable(data, pagination);
+  
+  // Generate pagination buttons
+  generatePaginationButtons(pagination);
+}
+
+// Shared function to render logbook table
+function renderLogbookTable(data, pagination) {
   const tb=document.getElementById('grows');
   if (!tb) {
     console.error('Table body element not found!');
@@ -1276,29 +1780,102 @@ async function loadLogbooks(){
   tb.innerHTML=''; 
   if(data.length===0){
     console.log('No logbook data, showing empty message');
-    tb.innerHTML='<tr><td colspan="7" class="text-center text-muted py-3">Tidak ada data</td></tr>';
+    tb.innerHTML=`
+      <tr>
+        <td colspan="7" class="text-center py-5">
+          <div class="d-flex flex-column align-items-center">
+            <i class="fas fa-book fa-3x text-muted opacity-50 mb-3"></i>
+            <div class="text-muted fw-semibold">Tidak ada data logbook</div>
+            <small class="text-muted">Belum ada jurnal harian yang tersedia</small>
+          </div>
+        </td>
+      </tr>
+    `;
   } else {
     console.log('Rendering logbook data:', data.length, 'entries');
     data.forEach((r,i)=>{ 
+      // Debug logging for all fields including file
+      console.log(`=== RECORD ${i + 1} ===`);
+      console.log('Full record:', r);
+      console.log('catatan_guru:', r.catatan_guru, 'Type:', typeof r.catatan_guru);
+      console.log('file:', r.file, 'Type:', typeof r.file);
+      console.log('file length:', r.file ? r.file.length : 'null');
+      
+      // Format tanggal
+      const tanggal = r.tanggal ? new Date(r.tanggal).toLocaleDateString('id-ID') : '-';
+      
+      // Truncate text untuk kegiatan dan kendala
+      const kegiatanShort = r.kegiatan ? (r.kegiatan.length > 60 ? r.kegiatan.substring(0, 60) + '...' : r.kegiatan) : '-';
+      const kendalaShort = r.kendala ? (r.kendala.length > 40 ? r.kendala.substring(0, 40) + '...' : r.kendala) : '-';
+      const catatanShort = r.catatan_guru ? (r.catatan_guru.length > 50 ? r.catatan_guru.substring(0, 50) + '...' : r.catatan_guru) : '-';
+      
+      // Status badge dengan styling yang lebih baik
+      let statusBadge = '';
+      if (r.status_verifikasi === 'disetujui') {
+        statusBadge = '<span class="badge bg-success"><i class="fas fa-check me-1"></i>Disetujui</span>';
+      } else if (r.status_verifikasi === 'ditolak') {
+        statusBadge = '<span class="badge bg-danger"><i class="fas fa-times me-1"></i>Ditolak</span>';
+      } else {
+        statusBadge = '<span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Pending</span>';
+      }
+      
       const tr=document.createElement('tr'); 
-      tr.innerHTML=`<td>${pagination.showing_start + i}</td>
-        <td><div class="fw-semibold">${r.siswa_nama||'-'}</div><div class="small text-muted">${r.tanggal||''}</div></td>
-        <td>${r.kegiatan||'-'}</td>
-        <td>${r.kendala||'-'}</td>
-        <td><span class="badge ${r.status_verifikasi==='disetujui'?'bg-success':(r.status_verifikasi==='ditolak'?'bg-danger':'bg-warning text-dark')}">${r.status_verifikasi}</span></td>
-        <td>${r.catatan_guru||'-'}</td>
-        <td class="text-nowrap"><button class="btn btn-sm btn-outline-primary" onclick='openJournalDetail(${JSON.stringify(r)})'>Lihat Detail</button></td>`; 
+      tr.className = 'modern-table-row';
+      tr.innerHTML=`
+        <td>
+          <div class="d-flex align-items-center justify-content-center">
+            <span class="badge bg-light text-dark fw-semibold">${pagination.showing_start + i}</span>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center">
+            <div class="student-avatar bg-success bg-opacity-10 text-success me-3">
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <div class="fw-semibold text-dark">${r.siswa_nama||'-'}</div>
+              <div class="small text-muted">
+                <i class="fas fa-calendar me-1"></i>${tanggal}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="logbook-content">
+            <div class="fw-semibold text-dark mb-1">
+              <i class="fas fa-tasks text-success me-2"></i>Kegiatan
+            </div>
+            <div class="text-muted small" title="${r.kegiatan||'-'}">${kegiatanShort}</div>
+          </div>
+        </td>
+        <td>
+          <div class="logbook-content">
+            <div class="fw-semibold text-dark mb-1">
+              <i class="fas fa-exclamation-triangle text-warning me-2"></i>Kendala
+            </div>
+            <div class="text-muted small" title="${r.kendala||'-'}">${kendalaShort}</div>
+          </div>
+        </td>
+        <td>${statusBadge}</td>
+        <td>
+          <div class="logbook-feedback">
+            <div class="fw-semibold text-dark mb-1">
+              <i class="fas fa-comment text-info me-2"></i>Catatan
+            </div>
+            <div class="text-muted small" title="${r.catatan_guru||'-'}">${catatanShort}</div>
+          </div>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-outline-success" onclick='testOpenModal(${JSON.stringify(r)})'>
+            <i class="fas fa-eye me-1"></i>Lihat
+          </button>
+        </td>`; 
       tb.appendChild(tr); 
     }); 
   }
   
   // Update pagination info
-  document.getElementById('logbook-showing-start').textContent=pagination.showing_start||0;
-  document.getElementById('logbook-showing-end').textContent=pagination.showing_end||0;
-  document.getElementById('logbook-total-records').textContent=pagination.total_records||0;
-  
-  // Generate pagination buttons
-  generatePaginationButtons(pagination);
+  document.getElementById('logbook-pagination-info').textContent = `Menampilkan ${pagination.showing_start||0} sampai ${pagination.showing_end||0} dari ${pagination.total_records||0} entri`;
 }
 
 function generatePaginationButtons(pagination) {
@@ -1359,58 +1936,7 @@ async function changePage(page) {
   
   let result;
   if (!res.ok) {
-    console.log('Logbook API failed in changePage, using fallback data');
-    
-    // Get user data to determine which fallback data to use
-    const userData = JSON.parse(localStorage.getItem('simmas_user') || '{}');
-    console.log('Current user in changePage:', userData);
-    
-    // Different fallback data based on user
-    if (userData.name === 'Pak Hendro') {
-      result = {
-        data: [
-          {
-            id: 1,
-            siswa_nama: 'Budi',
-            tanggal: '2025-09-27',
-            kegiatan: 'Ini adalah contoh laporan jurnal harian siswa magang',
-            kendala: '-',
-            status_verifikasi: 'disetujui',
-            catatan_guru: '-'
-          }
-        ],
-        pagination: {
-          showing_start: 1,
-          showing_end: 1,
-          total_records: 1,
-          current_page: 1,
-          total_pages: 1
-        }
-      };
-    } else if (userData.name === 'Pak Yanto') {
-      // Fallback data for Pak Yanto
-      result = {
-        data: [
-          {
-            id: 1,
-            siswa_nama: 'Rudi',
-            tanggal: '2025-09-27',
-            kegiatan: 'ini adalaha contoh laporan jurnal harian siswa magang',
-            kendala: 'Tidak ada kendala berarti',
-            status_verifikasi: 'pending',
-            catatan_guru: 'Belum ada catatan dari guru'
-          }
-        ],
-        pagination: {
-          showing_start: 1,
-          showing_end: 1,
-          total_records: 1,
-          current_page: 1,
-          total_pages: 1
-        }
-      };
-    } else {
-      // Default fallback for new guru accounts - no logbook data yet
+    console.log('Logbook API failed in changePage. Status:', res.status);
       result = {
         data: [],
         pagination: {
@@ -1421,7 +1947,6 @@ async function changePage(page) {
           total_pages: 0
         }
       };
-    }
   } else {
     result = await res.json();
   }
@@ -1429,28 +1954,8 @@ async function changePage(page) {
   const data=result.data||[];
   const pagination=result.pagination||{};
   
-  const tb=document.getElementById('grows'); 
-  tb.innerHTML=''; 
-  if(data.length===0){
-    tb.innerHTML='<tr><td colspan="7" class="text-center text-muted py-3">Tidak ada data</td></tr>';
-  } else {
-    data.forEach((r,i)=>{ 
-      const tr=document.createElement('tr'); 
-      tr.innerHTML=`<td>${pagination.showing_start + i}</td>
-        <td><div class="fw-semibold">${r.siswa_nama||'-'}</div><div class="small text-muted">${r.tanggal||''}</div></td>
-        <td>${r.kegiatan||'-'}</td>
-        <td>${r.kendala||'-'}</td>
-        <td><span class="badge ${r.status_verifikasi==='disetujui'?'bg-success':(r.status_verifikasi==='ditolak'?'bg-danger':'bg-warning text-dark')}">${r.status_verifikasi}</span></td>
-        <td>${r.catatan_guru||'-'}</td>
-        <td class="text-nowrap"><button class="btn btn-sm btn-outline-primary" onclick='openJournalDetail(${JSON.stringify(r)})'>Lihat Detail</button></td>`; 
-      tb.appendChild(tr); 
-    }); 
-  }
-  
-  // Update pagination info
-  document.getElementById('logbook-showing-start').textContent=pagination.showing_start||0;
-  document.getElementById('logbook-showing-end').textContent=pagination.showing_end||0;
-  document.getElementById('logbook-total-records').textContent=pagination.total_records||0;
+  // Use the same rendering logic as loadLogbooks()
+  renderLogbookTable(data, pagination);
   
   // Generate pagination buttons
   generatePaginationButtons(pagination);
@@ -1567,54 +2072,7 @@ async function loadLogbookStats() {
 }
 function openVerify(r){ document.getElementById('vid').value=r.id; document.getElementById('vstatus').value=r.status_verifikasi||'pending'; document.getElementById('vcat').value=r.catatan_guru||''; new bootstrap.Modal(document.getElementById('mVerify')).show(); }
 
-// Functions for new journal detail modal
-function openJournalDetail(journal) {
-  // Populate modal with journal data
-  document.getElementById('journal-id').value = journal.id;
-  document.getElementById('journal-date').textContent = formatDate(journal.tanggal);
-  document.getElementById('journal-student').textContent = journal.siswa_nama || '-';
-  document.getElementById('journal-company').textContent = journal.dudi_nama || '-';
-  document.getElementById('journal-date-detail').textContent = formatDate(journal.tanggal);
-  document.getElementById('journal-activity').textContent = journal.kegiatan || '-';
-  document.getElementById('journal-obstacle').textContent = journal.kendala || '-';
-  document.getElementById('journal-teacher-notes').textContent = journal.catatan_guru || 'Belum ada catatan dari guru';
-  document.getElementById('journal-created').textContent = formatDate(journal.created_at);
-  document.getElementById('journal-updated').textContent = formatDate(journal.updated_at);
-  
-  // Set status badge
-  const statusBadge = document.getElementById('journal-status-badge');
-  const status = journal.status_verifikasi || 'pending';
-  statusBadge.className = `badge ${getStatusBadgeClass(status)}`;
-  statusBadge.textContent = getStatusText(status);
-  
-  // Handle documentation
-  const docContainer = document.getElementById('journal-documentation');
-  if (journal.file) {
-    const fileExtension = journal.file.split('.').pop().toLowerCase();
-    const fileIcon = fileExtension === 'pdf' ? 'fas fa-file-pdf text-danger' : 
-                     fileExtension === 'doc' || fileExtension === 'docx' ? 'fas fa-file-word text-primary' :
-                     fileExtension === 'jpg' || fileExtension === 'jpeg' || fileExtension === 'png' ? 'fas fa-file-image text-success' :
-                     'fas fa-file text-secondary';
-    
-    docContainer.innerHTML = `
-      <div class="d-flex justify-content-between align-items-center">
-        <span><i class="${fileIcon} me-2"></i>${journal.file}</span>
-        <button class="btn btn-sm btn-success" onclick="downloadDocument('${journal.file}')">
-          <i class="fas fa-download me-1"></i>Unduh
-        </button>
-      </div>
-    `;
-  } else {
-    docContainer.innerHTML = '<p class="text-muted mb-0">Tidak ada dokumentasi</p>';
-  }
-  
-  // Reset teacher notes edit mode
-  document.getElementById('teacher-notes-display').classList.remove('d-none');
-  document.getElementById('teacher-notes-edit').classList.add('d-none');
-  
-  // Show modal
-  new bootstrap.Modal(document.getElementById('mJournalDetail')).show();
-}
+// Functions for new journal detail modal - REMOVED DUPLICATE
 
 function formatDate(dateString) {
   if (!dateString) return '-';
@@ -1765,9 +2223,9 @@ async function updateJournalStatus(status) {
 }
 
 function downloadDocument(filename) {
-  // Create a download link
+  // Create a download link using the file controller
   const link = document.createElement('a');
-  link.href = `/uploads/${filename}`;
+  link.href = `/file/download/${filename}`;
   link.download = filename;
   link.target = '_blank';
   document.body.appendChild(link);
@@ -1785,6 +2243,325 @@ function downloadDocument(filename) {
       if(!res.ok){ alert('Gagal menyimpan'); return;} 
       bootstrap.Modal.getInstance(document.getElementById('mVerify')).hide(); 
       loadLogbooks(); 
+    }
+
+    // Test functions removed - no longer needed
+
+    // Close modal function removed - using Bootstrap modal close
+
+    // Function to open modal with real data using vanilla JavaScript
+    function testOpenModal(data) {
+      console.log('=== OPEN MODAL WITH DATA ===');
+      console.log('Data:', data);
+      
+      try {
+        const modal = document.getElementById('mJournalDetail');
+        if (modal) {
+          console.log('Modal found, populating with data...');
+          
+          // Fill modal with real data
+          document.getElementById('journal-id').value = data.id || '';
+          document.getElementById('journal-student').textContent = data.siswa_nama || '-';
+          document.getElementById('journal-company').textContent = data.nama_perusahaan || '-';
+          document.getElementById('journal-date').textContent = data.tanggal || '-';
+          document.getElementById('journal-date-detail').textContent = data.tanggal || '-';
+          document.getElementById('journal-activity').textContent = data.kegiatan || '-';
+          document.getElementById('journal-obstacle').textContent = data.kendala || '-';
+          document.getElementById('journal-teacher-notes').textContent = data.catatan_guru || 'Belum ada catatan dari guru';
+          
+          // Update documentation section
+          console.log('=== UPDATING DOCUMENTATION IN testOpenModal ===');
+          console.log('Data object:', data);
+          console.log('data.file value:', data.file);
+          console.log('data.file type:', typeof data.file);
+          console.log('data.file length:', data.file ? data.file.length : 'null');
+          
+          const docElement = document.getElementById('journal-documentation');
+          console.log('Documentation element found:', docElement);
+          
+          if (data.file && data.file.trim() !== '') {
+            console.log('✅ File found:', data.file);
+            docElement.innerHTML = `
+              <div class="d-flex align-items-center">
+                <i class="fas fa-file-image text-success me-2"></i>
+                <div class="flex-grow-1">
+                  <p class="mb-1 fw-semibold">Dokumentasi tersedia</p>
+                  <small class="text-muted">File: ${data.file}</small>
+                </div>
+                <button class="btn btn-sm btn-outline-success" onclick="downloadDocument('${data.file}')">
+                  <i class="fas fa-download me-1"></i>Download
+                </button>
+              </div>
+            `;
+            console.log('✅ Documentation HTML updated with file');
+          } else {
+            console.log('❌ No file found or file is empty');
+            console.log('File value:', data.file);
+            console.log('File trimmed:', data.file ? data.file.trim() : 'null');
+            docElement.innerHTML = '<p class="text-muted mb-0">Tidak ada dokumentasi</p>';
+            console.log('❌ Documentation HTML updated with no file message');
+          }
+          
+          // Update status badge
+          const statusBadge = document.getElementById('journal-status-badge');
+          const status = data.status_verifikasi || 'pending';
+          statusBadge.className = `badge ${getStatusBadgeClass(status)}`;
+          statusBadge.textContent = getStatusText(status);
+          
+          // Update updated date
+          document.getElementById('journal-updated').textContent = formatDate(data.updated_at || new Date().toISOString());
+          
+          // Show modal with Bootstrap
+          const bsModal = new bootstrap.Modal(modal);
+          bsModal.show();
+          
+          console.log('Modal shown with real data successfully!');
+        } else {
+          console.error('Modal not found!');
+          alert('Modal tidak ditemukan!');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    // Function to open journal detail modal
+    function openJournalDetail(data) {
+      console.log('=== OPEN JOURNAL DETAIL ===');
+      console.log('Data received:', data);
+      console.log('Data type:', typeof data);
+      
+      try {
+        // Check if modal exists
+        const modalElement = document.getElementById('mJournalDetail');
+        if (!modalElement) {
+          console.error('Modal element mJournalDetail not found!');
+          alert('Modal tidak ditemukan!');
+          return;
+        }
+        console.log('Modal element found:', modalElement);
+        
+        // Populate modal with data
+        console.log('Populating modal with data...');
+        document.getElementById('journal-id').value = data.id || '';
+        document.getElementById('journal-student').textContent = data.siswa_nama || '-';
+        document.getElementById('journal-company').textContent = data.nama_perusahaan || '-';
+        document.getElementById('journal-date').textContent = data.tanggal || '-';
+        document.getElementById('journal-date-detail').textContent = data.tanggal || '-';
+        document.getElementById('journal-activity').textContent = data.kegiatan || '-';
+        document.getElementById('journal-obstacle').textContent = data.kendala || '-';
+        document.getElementById('journal-teacher-notes').textContent = data.catatan_guru || 'Belum ada catatan dari guru';
+        
+        // Update documentation section
+        console.log('=== UPDATING DOCUMENTATION ===');
+        console.log('Data object:', data);
+        console.log('data.file value:', data.file);
+        console.log('data.file type:', typeof data.file);
+        console.log('data.file length:', data.file ? data.file.length : 'null');
+        
+        const docElement = document.getElementById('journal-documentation');
+        console.log('Documentation element found:', docElement);
+        
+        if (data.file && data.file.trim() !== '') {
+          console.log('✅ File found:', data.file);
+          docElement.innerHTML = `
+            <div class="d-flex align-items-center">
+              <i class="fas fa-file-image text-success me-2"></i>
+              <div class="flex-grow-1">
+                <p class="mb-1 fw-semibold">Dokumentasi tersedia</p>
+                <small class="text-muted">File: ${data.file}</small>
+              </div>
+              <button class="btn btn-sm btn-outline-success" onclick="downloadDocument('${data.file}')">
+                <i class="fas fa-download me-1"></i>Download
+              </button>
+            </div>
+          `;
+          console.log('✅ Documentation HTML updated with file');
+        } else {
+          console.log('❌ No file found or file is empty');
+          console.log('File value:', data.file);
+          console.log('File trimmed:', data.file ? data.file.trim() : 'null');
+          docElement.innerHTML = '<p class="text-muted mb-0">Tidak ada dokumentasi</p>';
+          console.log('❌ Documentation HTML updated with no file message');
+        }
+        
+        // Update status badge
+        console.log('Updating status badge...');
+        const statusBadge = document.getElementById('journal-status-badge');
+        const status = data.status_verifikasi || 'pending';
+        console.log('Status:', status);
+        statusBadge.className = `badge ${getStatusBadgeClass(status)}`;
+        statusBadge.textContent = getStatusText(status);
+        
+        // Update updated date
+        console.log('Updating date...');
+        document.getElementById('journal-updated').textContent = formatDate(data.updated_at || new Date().toISOString());
+        
+        // Reset edit mode
+        console.log('Resetting edit mode...');
+        cancelTeacherNotesEdit();
+        
+        // Show modal
+        console.log('Showing modal...');
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+        console.log('Modal shown successfully!');
+        
+      } catch (error) {
+        console.error('Error in openJournalDetail:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    // Helper function to get status badge class
+    function getStatusBadgeClass(status) {
+      switch(status) {
+        case 'disetujui': return 'bg-success';
+        case 'ditolak': return 'bg-danger';
+        case 'pending': return 'bg-warning text-dark';
+        default: return 'bg-secondary';
+      }
+    }
+
+    // Helper function to get status text
+    function getStatusText(status) {
+      switch(status) {
+        case 'disetujui': return 'Disetujui';
+        case 'ditolak': return 'Ditolak';
+        case 'pending': return 'Pending';
+        default: return 'Unknown';
+      }
+    }
+
+    // Helper function to format date
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Function to toggle teacher notes edit mode
+    function toggleTeacherNotesEdit() {
+      const display = document.getElementById('teacher-notes-display');
+      const edit = document.getElementById('teacher-notes-edit');
+      const input = document.getElementById('journal-teacher-notes-input');
+      
+      if (display && edit) {
+        display.classList.add('d-none');
+        edit.classList.remove('d-none');
+        
+        // Set current notes value in textarea
+        const currentNotes = document.getElementById('journal-teacher-notes').textContent;
+        if (input && currentNotes !== 'Belum ada catatan dari guru') {
+          input.value = currentNotes;
+        }
+        
+        // Focus on textarea
+        if (input) {
+          input.focus();
+        }
+      }
+    }
+
+    // Function to cancel teacher notes edit
+    function cancelTeacherNotesEdit() {
+      const display = document.getElementById('teacher-notes-display');
+      const edit = document.getElementById('teacher-notes-edit');
+      
+      if (display && edit) {
+        display.classList.remove('d-none');
+        edit.classList.add('d-none');
+      }
+    }
+
+    // Function to save teacher notes
+    async function saveTeacherNotes() {
+      const {t} = requireAuth();
+      const journalId = document.getElementById('journal-id').value;
+      const notes = document.getElementById('journal-teacher-notes-input').value;
+      
+      if (!journalId) {
+        toast('ID jurnal tidak ditemukan', 'danger');
+        return;
+      }
+      
+      try {
+        const res = await fetch(`/api/guru/logbook/${journalId}/verify`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + t,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            catatan_guru: notes
+          })
+        });
+        
+        if (!res.ok) {
+          toast('Gagal menyimpan catatan', 'danger');
+          return;
+        }
+        
+        // Update display
+        document.getElementById('journal-teacher-notes').textContent = notes || 'Belum ada catatan dari guru';
+        document.getElementById('journal-updated').textContent = formatDate(new Date().toISOString());
+        
+        // Hide edit mode
+        cancelTeacherNotesEdit();
+        
+        // Reload logbook list
+        loadLogbooks();
+        loadLogbookStats();
+        
+        // Show success message
+        toast('Catatan berhasil disimpan', 'success');
+        
+      } catch (error) {
+        console.error('Error saving teacher notes:', error);
+        toast('Gagal menyimpan catatan', 'danger');
+      }
+    }
+
+    // Simple toast notification function
+    function toast(message, type = 'info') {
+      // Create toast element
+      const toastEl = document.createElement('div');
+      toastEl.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'danger' ? 'danger' : type === 'warning' ? 'warning' : 'info'} border-0`;
+      toastEl.setAttribute('role', 'alert');
+      toastEl.innerHTML = `
+        <div class="d-flex">
+          <div class="toast-body">${message}</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      `;
+      
+      // Add to toast container
+      let toastContainer = document.getElementById('toast-container');
+      if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+      }
+      
+      toastContainer.appendChild(toastEl);
+      
+      // Show toast
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+      
+      // Remove from DOM after hiding
+      toastEl.addEventListener('hidden.bs.toast', () => {
+        toastEl.remove();
+      });
     }
 
     async function loadSchoolInfo() {
@@ -1997,18 +2774,24 @@ function downloadDocument(filename) {
       tb.innerHTML=''; 
       
       if((rows||[]).length===0){ 
-        tb.innerHTML='<tr><td colspan="7" class="text-center text-muted py-3">Tidak ada data</td></tr>'; 
+        tb.innerHTML=`
+          <tr>
+            <td colspan="7" class="text-center py-5">
+              <div class="d-flex flex-column align-items-center">
+                <i class="fas fa-briefcase fa-3x text-muted opacity-50 mb-3"></i>
+                <div class="text-muted fw-semibold">Tidak ada data magang</div>
+                <small class="text-muted">Belum ada penempatan magang yang tersedia</small>
+              </div>
+            </td>
+          </tr>
+        `; 
         // Update pagination info for empty data
-        document.getElementById('im-start').textContent = '0';
-        document.getElementById('im-end').textContent = '0';
-        document.getElementById('im-total-records').textContent = '0';
+        document.getElementById('im-pagination-info').textContent = 'Menampilkan 0 sampai 0 dari 0 entri';
         return;
       }
       
       // Update pagination info
-      document.getElementById('im-start').textContent = '1';
-      document.getElementById('im-end').textContent = rows.length;
-      document.getElementById('im-total-records').textContent = rows.length;
+        document.getElementById('im-pagination-info').textContent = `Menampilkan 1 sampai ${rows.length} dari ${rows.length} entri`;
       
       (rows||[]).forEach(it=>{ 
         // Format periode dengan durasi
@@ -2053,18 +2836,40 @@ function downloadDocument(filename) {
         }
         
         const tr=document.createElement('tr'); 
+        tr.className = 'modern-table-row';
         tr.innerHTML=`
           <td>
-            <div class="fw-semibold">${it.siswa_nama||'Siswa ID: '+it.siswa_id}</div>
+            <div class="d-flex align-items-center">
+              <div class="student-avatar bg-success bg-opacity-10 text-success me-3">
+                <i class="fas fa-user"></i>
+              </div>
+              <div>
+                <div class="fw-semibold text-dark">${it.siswa_nama||'Siswa ID: '+it.siswa_id}</div>
             <div class="small text-muted">NIS: ${it.nis||'-'} • ${it.kelas||'-'} • ${it.jurusan||'-'}</div>
+              </div>
+            </div>
           </td>
           <td>
-            <div class="fw-semibold">${it.guru_nama||'Guru ID: '+it.guru_id}</div>
+            <div class="d-flex align-items-center">
+              <div class="student-avatar bg-info bg-opacity-10 text-info me-3">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
+              <div>
+                <div class="fw-semibold text-dark">${it.guru_nama||'Guru ID: '+it.guru_id}</div>
             <div class="small text-muted">NIP: ${it.nip||'-'}</div>
+              </div>
+            </div>
           </td>
           <td>
-            <div class="fw-semibold">${it.nama_perusahaan||'DUDI ID: '+it.dudi_id}</div>
+            <div class="d-flex align-items-center">
+              <div class="student-avatar bg-warning bg-opacity-10 text-warning me-3">
+                <i class="fas fa-building"></i>
+              </div>
+              <div>
+                <div class="fw-semibold text-dark">${it.nama_perusahaan||'DUDI ID: '+it.dudi_id}</div>
             <div class="small text-muted">${it.alamat||'-'} • ${it.penanggung_jawab||'-'}</div>
+              </div>
+            </div>
           </td>
           <td>
             <div>${period}</div>
@@ -2121,6 +2926,15 @@ function downloadDocument(filename) {
           document.getElementById('gend').value = internship.tanggal_selesai || '';
           document.getElementById('gstatus').value = internship.status || 'pending';
           document.getElementById('gval').value = internship.nilai || '';
+          
+          // Ensure the input field is editable
+          const nilaiInput = document.getElementById('gval');
+          if (nilaiInput) {
+            nilaiInput.removeAttribute('readonly');
+            nilaiInput.removeAttribute('disabled');
+            nilaiInput.style.pointerEvents = 'auto';
+            nilaiInput.style.userSelect = 'auto';
+          }
         }
       } catch (e) {
         console.error('Error loading internship data:', e);
@@ -2131,36 +2945,62 @@ function downloadDocument(filename) {
       const {t}=requireAuth(); 
       const id=document.getElementById('gid').value; 
       const status=document.getElementById('gstatus').value;
+      
+      // Validate required fields
+      if (!id) {
+        toast('ID magang tidak ditemukan', 'danger');
+        return;
+      }
+      
       const payload={
         tanggal_mulai: document.getElementById('gstart').value||null,
         tanggal_selesai: document.getElementById('gend').value||null,
         status
       };
+      
       // Nilai hanya jika selesai dan terisi
       const val=document.getElementById('gval').value;
-      if(status==='selesai' && val!=='') payload.nilai=parseInt(val||'0',10);
+      if(status==='selesai' && val!=='') {
+        payload.nilai_akhir = parseInt(val||'0',10);
+      }
+      
+      console.log('Submitting grade update:', { id, payload });
+      
       try{ 
-        const r=await fetch('/api/guru/internships/'+encodeURIComponent(id),{method:'PUT',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify(payload)});
-        const d=await r.json();
+        const r=await fetch('/api/guru/internships/'+encodeURIComponent(id),{
+          method:'PUT',
+          headers:{
+            Authorization:'Bearer '+t,
+            'Content-Type':'application/json'
+          },
+          body:JSON.stringify(payload)
+        });
+        
+        console.log('Update response status:', r.status);
+        
         if(!r.ok){
-          // Fallback: if API update belum tersedia, gunakan endpoint khusus
-          if(status==='selesai'){
-            const g=await fetch('/api/guru/internships/'+encodeURIComponent(id)+'/grade',{method:'PUT',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({nilai: parseInt(document.getElementById('gval').value||'0',10)})});
-            const gd=await g.json(); if(!g.ok){ alert(gd.message||'Gagal'); return; }
-          } else if(status==='aktif'){
-            const current = (document.getElementById('gcur').value||'').toLowerCase();
-            if(current==='pending'){
-        const a=await fetch('/api/guru/internships/'+encodeURIComponent(id)+'/activate',{method:'PUT',headers:{Authorization:'Bearer '+t}});
-        const ad=await a.json(); if(!a.ok){ alert(ad.message||'Gagal'); return; }
-        } else {
-          alert('Perubahan status ini belum didukung. Ubah ke Selesai untuk isi nilai, atau dari Pending ke Aktif.');
+          const errorData = await r.json();
+          console.error('Update failed:', errorData);
+          toast(errorData.message || 'Gagal memperbarui data magang', 'danger');
           return;
         }
-      } else { alert(d.message||'Gagal'); return; }
-    }
+        
+        const d=await r.json();
+        console.log('Update successful:', d);
+        
+        // Close modal
     bootstrap.Modal.getInstance(document.getElementById('mGrade')).hide();
+        
+        // Reload data
     loadInternships();
-  }catch(e){ alert('Gagal menyimpan perubahan'); }
+        
+        // Show success message
+        toast('Data magang berhasil diperbarui', 'success');
+        
+      }catch(e){ 
+        console.error('Error updating magang:', e);
+        toast('Gagal menyimpan perubahan: ' + e.message, 'danger'); 
+      }
 }
 async function deleteGrade(id){ const {t}=requireAuth(); if(!confirm('Hapus nilai untuk penempatan ini?')) return; try{ const r=await fetch('/api/guru/internships/'+id+'/grade',{method:'PUT',headers:{Authorization:'Bearer '+t,'Content-Type':'application/json'},body:JSON.stringify({nilai:null})}); const d=await r.json(); if(!r.ok){ alert(d.message||'Gagal'); return;} loadInternships(); }catch(e){ alert('Gagal menghapus nilai'); }}
 async function deleteInternship(id){ const {t}=requireAuth(); if(!confirm('Hapus data penempatan ini? Tindakan ini tidak dapat dibatalkan.')) return; try{ const r=await fetch('/api/guru/internships/'+id,{method:'DELETE',headers:{Authorization:'Bearer '+t}}); const d=await r.json(); if(!r.ok){ alert(d.message||'Gagal menghapus data'); return;} loadInternships(); }catch(e){ alert('Gagal menghapus data penempatan'); }}
@@ -2200,6 +3040,14 @@ async function submitCreateInternship(){
     bootstrap.Modal.getInstance(document.getElementById('mCreate')).hide();
     loadInternships();
   }catch(e){ msg.textContent='Terjadi kesalahan'; msg.classList.remove('d-none'); }
+}
+
+// Reset magang filters
+function resetMagangFilters() {
+  document.getElementById('im-q').value = '';
+  document.getElementById('im-status').value = '';
+  document.getElementById('im-per-page').value = '10';
+  loadInternships();
 }
   </script>
 </body></html>

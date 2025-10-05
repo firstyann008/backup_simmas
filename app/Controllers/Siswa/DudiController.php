@@ -14,16 +14,15 @@ class DudiController extends BaseController
 
         $q = trim((string)$this->request->getGet('q'));
         $db = db_connect();
-        // agregasi jumlah siswa (aktif+pending) per DUDI - exclude soft deleted
+        // agregasi jumlah siswa (aktif+pending) per DUDI
         $agg = $db->table('magang')
             ->select('dudi_id, COUNT(*) as cnt')
             ->groupStart()->where('status','aktif')->orWhere('status','pending')->groupEnd()
-            ->where('deleted_at IS NULL', null, false)
             ->groupBy('dudi_id')
             ->getCompiledSelect();
 
         $builder = $db->table('dudi d')
-            ->select('d.id, d.nama_perusahaan, d.alamat, d.telepon, d.email, d.penanggung_jawab, d.status, COALESCE(x.cnt,0) as jumlah_siswa')
+            ->select('d.id, d.nama_perusahaan, d.alamat, d.telepon, d.email, d.penanggung_jawab, d.status, d.kuota, COALESCE(x.cnt,0) as jumlah_siswa')
             ->join("($agg) x", 'x.dudi_id = d.id', 'left')
             ->where('d.status','aktif');
         if ($q !== '') {

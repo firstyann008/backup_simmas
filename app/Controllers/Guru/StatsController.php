@@ -16,17 +16,16 @@ class StatsController extends BaseController
         $guruId = $guru['id'] ?? null;
         $userId = (int) $user['id'];
 
-        // Total siswa bimbingan (DISTINCT siswa) - exclude soft deleted
+        // Total siswa bimbingan (DISTINCT siswa)
         $totalBimbingan = (int) $db->table('magang')
             ->select('COUNT(DISTINCT siswa_id) as cnt')
             ->groupStart()
                 ->where('guru_id', (int) $guruId)
                 ->orWhere('guru_id', $userId)
             ->groupEnd()
-            ->where('deleted_at IS NULL', null, false)
             ->get()->getRow('cnt');
 
-        // Siswa magang aktif (DISTINCT siswa status aktif/pending) - exclude soft deleted
+        // Siswa magang aktif (DISTINCT siswa status aktif/pending)
         $aktif = (int) $db->table('magang')
             ->select('COUNT(DISTINCT siswa_id) as cnt')
             ->groupStart()
@@ -37,7 +36,6 @@ class StatsController extends BaseController
                 ->where('status','aktif')
                 ->orWhere('status','pending')
             ->groupEnd()
-            ->where('deleted_at IS NULL', null, false)
             ->get()->getRow('cnt');
         $hariIni = date('Y-m-d');
         $logbookHariIni = (int) $db->table('logbook l')
@@ -46,11 +44,10 @@ class StatsController extends BaseController
                 ->where('m.guru_id', (int) $guruId)
                 ->orWhere('m.guru_id', $userId)
             ->groupEnd()
-            ->where('m.deleted_at IS NULL', null, false)
             ->where('l.tanggal', $hariIni)
             ->countAllResults();
 
-        // DUDI partner terhubung (distinct dudi dari siswa bimbingan) - exclude soft deleted
+        // DUDI partner terhubung (distinct dudi dari siswa bimbingan)
         // DUDI partner terhubung dari magang aktif (lebih representatif)
         $dudiPartner = (int) $db->table('magang')
             ->select('COUNT(DISTINCT dudi_id) as cnt')
@@ -62,10 +59,9 @@ class StatsController extends BaseController
                 ->where('status','aktif')
                 ->orWhere('status','pending')
             ->groupEnd()
-            ->where('deleted_at IS NULL', null, false)
             ->get()->getRow('cnt');
 
-        // Ambil 1 penempatan TERBARU per siswa bimbingan dengan status AKTIF saja - exclude soft deleted
+        // Ambil 1 penempatan TERBARU per siswa bimbingan dengan status AKTIF saja
         $latestMagangRows = $db->table('magang')
             ->select('MAX(id) as id')
             ->groupStart()
@@ -75,18 +71,16 @@ class StatsController extends BaseController
             ->groupStart()
                 ->where('status','aktif')
             ->groupEnd()
-            ->where('deleted_at IS NULL', null, false)
             ->groupBy('siswa_id')
             ->get()->getResultArray();
 
         $latestMagangIds = array_map(static function($r){ return (int) ($r['id'] ?? 0); }, $latestMagangRows);
 
-        // Magang terbaru (berdasarkan 1 penempatan terakhir per siswa) - exclude soft deleted
+        // Magang terbaru (berdasarkan 1 penempatan terakhir per siswa)
         $magangTerbaruBuilder = $db->table('magang m')
             ->select('m.id, m.tanggal_mulai, m.tanggal_selesai, m.status, u.name as siswa_nama, d.nama_perusahaan as dudi_nama')
             ->join('users u','u.id=m.siswa_id','left')
-            ->join('dudi d','d.id=m.dudi_id','left')
-            ->where('m.deleted_at IS NULL', null, false);
+            ->join('dudi d','d.id=m.dudi_id','left');
         if (!empty($latestMagangIds)) {
             $magangTerbaruBuilder->whereIn('m.id', $latestMagangIds);
         } else {

@@ -5,8 +5,9 @@ $userRole = $user['role'] ?? 'guest';
 
 // Load school info from database
 $db = db_connect();
-$schoolInfo = $db->table('school_settings')->get()->getRowArray();
+$schoolInfo = $db->table('settings')->get()->getRowArray();
 $schoolName = $schoolInfo['nama_sekolah'] ?? 'SMK Negeri 1 Surabaya';
+$logoUrl    = $schoolInfo['logo_url'] ?? null;
 
 // Debug logging
 log_message('debug', 'Sidebar school name loaded: ' . $schoolName);
@@ -37,16 +38,20 @@ $menuItems = match($userRole) {
 ?>
 
 <!-- Sidebar Component -->
-<aside id="sidebar" class="sidebar bg-light border-end d-flex flex-column" style="min-height: 100vh; width: 280px; transition: transform 0.3s ease;">
+<aside id="sidebar" class="sidebar border-end d-flex flex-column" style="min-height: 100vh; width: 320px; flex: 0 0 320px; transition: transform 0.3s ease; background: var(--bg-surface);">
   <!-- Sidebar Header -->
   <div class="border-bottom sidebar-header">
     <div class="d-flex align-items-center justify-content-between w-100" style="margin-bottom: 0;">
       <div class="d-flex align-items-center flex-grow-1">
-        <div class="bg-primary rounded-2 d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
-          <i class="fas fa-graduation-cap text-white fs-5"></i>
-        </div>
+        <?php if (!empty($logoUrl)): ?>
+          <img src="<?= esc($logoUrl) ?>" alt="Logo Sekolah" class="me-3" style="width: 40px; height: 40px; object-fit: contain; border-radius: 8px; background: #fff;">
+        <?php else: ?>
+          <div class="bg-primary rounded-2 d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+            <i class="fas fa-graduation-cap text-white fs-5"></i>
+          </div>
+        <?php endif; ?>
         <div>
-          <h5 class="mb-0 fw-bold text-dark">SIMMAS</h5>
+          <h5 class="mb-0 fw-bold text-dark"><?= esc($schoolName) ?></h5>
           <small class="text-muted"><?= ucfirst($userRole) ?> Panel</small>
         </div>
       </div>
@@ -81,13 +86,13 @@ $menuItems = match($userRole) {
   </nav>
 
   <!-- Sidebar Footer -->
-  <div class="p-3 border-top bg-light">
+  <div class="p-3 border-top" style="background: var(--bg-surface);">
     <div class="d-flex align-items-center mb-2">
-      <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px;"></div>
-      <small class="text-muted fw-semibold"><?= $schoolName ?></small>
+      <div class="rounded-circle me-2" style="width: 8px; height: 8px; background: var(--brand-600);"></div>
+      <small class="fw-semibold" style="color: var(--text-secondary);"><?= $schoolName ?></small>
     </div>
     <div class="small text-muted">
-      Sistem Pelaporan <?= $appVersion ?>
+      <span style="color: var(--text-secondary);">Sistem Pelaporan <?= $appVersion ?></span>
     </div>
   </div>
 </aside>
@@ -113,40 +118,41 @@ $menuItems = match($userRole) {
 <style>
 /* Sidebar styles */
 .sidebar {
-  background-color: #f8f9fa;
-  border-right: 1px solid #dee2e6;
+  background-color: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
 }
 
 .sidebar .nav-link {
-  color: #6c757d;
+  color: var(--text-secondary);
   transition: all 0.2s ease;
   border: none;
   background: none;
 }
 
 .sidebar .nav-link:hover {
-  background-color: #e9ecef;
-  color: #495057;
+  background-color: var(--brand-50);
+  color: var(--text-primary);
 }
 
 .sidebar .nav-link.active {
-  background-color: #0d6efd;
-  color: white;
-  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.2);
+  background-color: var(--brand-600);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(30, 126, 113, 0.25);
 }
 
 .sidebar .nav-link.active:hover {
-  background-color: #0b5ed7;
-  color: white;
+  background-color: var(--brand-700);
+  color: #fff;
 }
 
 .sidebar .nav-link.active i {
-  color: white;
+  color: #fff;
 }
 
 .sidebar .nav-link i {
   width: 20px;
   text-align: center;
+  color: var(--brand-600);
 }
 
 /* Sidebar toggle styles */
@@ -348,12 +354,20 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Debug: log the click
       console.log('Sidebar link clicked:', this.textContent.trim());
+      console.log('Link href:', this.getAttribute('href'));
+      console.log('Link data-link:', this.getAttribute('data-link'));
       
       // Allow onclick to execute
       const onclickAttr = this.getAttribute('onclick');
       if (onclickAttr) {
         console.log('Executing onclick:', onclickAttr);
-        eval(onclickAttr);
+        try {
+          eval(onclickAttr);
+        } catch (error) {
+          console.error('Error executing onclick:', error);
+        }
+      } else {
+        console.log('No onclick attribute found');
       }
     });
     

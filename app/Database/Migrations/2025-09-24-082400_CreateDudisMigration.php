@@ -11,8 +11,10 @@ class CreateDudisMigration extends Migration
         $this->forge->dropTable('dudi', true);
         $this->forge->addField([
             'id' => [
-                'type' => 'SERIAL',
-                'null' => false,
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+                'auto_increment' => true,
             ],
             'user_id' => [
                 'type' => 'INT',

@@ -39,7 +39,7 @@ class InternshipController extends BaseController
             // Hitung statistik berdasarkan filter yang sama dengan index()
             // Siswa yang dibimbing + siswa yang daftar mandiri
             $builder = $db->table('magang m')
-                ->where('m.deleted_at IS NULL', null, false)
+                // ->where('m.deleted_at IS NULL', null, false) // Kolom deleted_at tidak ada di tabel magang
                 ->groupStart()
                     // Siswa yang dibimbing oleh guru ini (cek baik guru_id dari tabel guru maupun user_id)
                     ->where('m.guru_id', $guruId)
@@ -110,9 +110,10 @@ class InternshipController extends BaseController
                          d.nama_perusahaan, d.alamat, d.penanggung_jawab')
                 ->join('users u', 'u.id = m.siswa_id', 'left')
                 ->join('siswa s', 's.user_id = m.siswa_id', 'left')
-                ->join('guru g', 'g.id = m.guru_id', 'left')
+                // Join ke tabel guru; dukung data lama yang menyimpan user_id pada kolom guru_id
+                ->join('guru g', 'g.id = m.guru_id OR g.user_id = m.guru_id', 'left', false)
                 ->join('dudi d', 'd.id = m.dudi_id', 'left')
-                ->where('m.deleted_at IS NULL', null, false)
+                // ->where('m.deleted_at IS NULL', null, false) // Kolom deleted_at tidak ada di tabel magang
                 ->groupStart()
                     // Siswa yang dibimbing oleh guru ini (cek baik guru_id dari tabel guru maupun user_id)
                     ->where('m.guru_id', $guruId)
@@ -149,6 +150,9 @@ class InternshipController extends BaseController
         $user = $this->request->user ?? null;
         if (!$user) return $this->response->setStatusCode(401)->setJSON(['message'=>'Unauthorized']);
         $db = db_connect();
+        // Tentukan guru_id yang benar (id pada tabel guru jika ada, fallback ke user_id untuk kompatibilitas lama)
+        $guruRow = $db->table('guru')->where('user_id', (int)$user['id'])->get()->getRowArray();
+        $guruId = $guruRow ? (int)$guruRow['id'] : (int)$user['id'];
         // Tampilkan hanya siswa yang belum memiliki penempatan/guru pembimbing sama sekali
         // (tidak ada record pada tabel magang), sehingga juga mengecualikan yang sudah selesai PKL
         $rows = $db->table('users u')
@@ -181,7 +185,7 @@ class InternshipController extends BaseController
         }
         $db->table('magang')->insert([
             'siswa_id' => $siswaId,
-            'guru_id' => (int)$user['id'],
+            'guru_id' => $guruId,
             'dudi_id' => $dudiId,
             'tanggal_mulai' => $tanggalMulai,
             'tanggal_selesai' => $tanggalSelesai,
@@ -360,11 +364,11 @@ class InternshipController extends BaseController
             // ketika status diubah menjadi aktif oleh guru, set guru_id menjadi guru yang menyetujui
             if ($status === 'aktif') { $data['guru_id'] = $guruId; }
         }
-        if (array_key_exists('nilai', $payload)) {
-            $n = $payload['nilai'];
-            if ($n === null || $n === '') $data['nilai'] = null; else {
+        if (array_key_exists('nilai_akhir', $payload)) {
+            $n = $payload['nilai_akhir'];
+            if ($n === null || $n === '') $data['nilai_akhir'] = null; else {
                 $n = (int)$n; if ($n < 0 || $n > 100) return $this->response->setStatusCode(422)->setJSON(['message'=>'Nilai harus 0-100']);
-                $data['nilai'] = $n;
+                $data['nilai_akhir'] = $n;
             }
         }
         if (empty($data)) return $this->response->setJSON(['message'=>'Tidak ada perubahan','success'=>true]);

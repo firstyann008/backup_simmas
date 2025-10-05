@@ -27,12 +27,26 @@ class UserController extends BaseController
             $builder->where('role', $role);
         }
         
-        return $this->response->setJSON($builder->orderBy('created_at', 'DESC')->get()->getResultArray());
+        $data = $builder->orderBy('created_at', 'DESC')->get()->getResultArray();
+        
+        // Debug: Log data untuk melihat apa yang dikirim
+        log_message('debug', 'Users API data: ' . json_encode($data));
+        
+        return $this->response->setJSON($data);
     }
 
     public function create()
     {
         $data = $this->request->getJSON(true) ?: $this->request->getPost();
+        
+        // Debug: Log received data
+        log_message('debug', 'UserController create - Received data: ' . json_encode($data));
+        
+        // Debug: Log specific fields for guru
+        if ($data['role'] === 'guru') {
+            log_message('debug', 'Guru fields - nip: ' . ($data['nip'] ?? 'NOT SET') . ', alamat: ' . ($data['alamat'] ?? 'NOT SET') . ', telepon: ' . ($data['telepon'] ?? 'NOT SET'));
+        }
+        
         if (empty($data['name']) || empty($data['email']) || empty($data['password']) || empty($data['role'])) {
             return $this->response->setStatusCode(422)->setJSON(['message' => 'Data tidak lengkap']);
         }
@@ -54,8 +68,12 @@ class UserController extends BaseController
             if (!$exists) {
                 $db->table('guru')->insert([
                     'user_id' => $id,
+                    'nip' => $data['nip'] ?? null,
                     'nama' => $data['name'] ?? 'Guru',
+                    'alamat' => $data['alamat'] ?? null,
                     'telepon' => $data['telepon'] ?? null,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]);
             }
         } elseif ($data['role'] === 'siswa') {
@@ -63,9 +81,14 @@ class UserController extends BaseController
             if (!$exists) {
                 $db->table('siswa')->insert([
                     'user_id' => $id,
+                    'nis' => $data['nis'] ?? null,
                     'nama' => $data['name'] ?? 'Siswa',
                     'kelas' => $data['kelas'] ?? null,
                     'jurusan' => $data['jurusan'] ?? null,
+                    'alamat' => $data['alamat'] ?? null,
+                    'telepon' => $data['telepon'] ?? null,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]);
             }
         }
@@ -98,12 +121,50 @@ class UserController extends BaseController
         if ($user) {
             if ($user['role'] === 'guru') {
                 $row = $db->table('guru')->where('user_id', $id)->get()->getRowArray();
-                if ($row) { $db->table('guru')->where('user_id',$id)->update(['nama'=>$user['name']]); }
-                else { $db->table('guru')->insert(['user_id'=>$id,'nama'=>$user['name']]); }
+                if ($row) { 
+                    $db->table('guru')->where('user_id',$id)->update([
+                        'nip' => $data['nip'] ?? $row['nip'],
+                        'nama' => $user['name'],
+                        'alamat' => $data['alamat'] ?? $row['alamat'],
+                        'telepon' => $data['telepon'] ?? $row['telepon'],
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]); 
+                } else { 
+                    $db->table('guru')->insert([
+                        'user_id' => $id,
+                        'nip' => $data['nip'] ?? null,
+                        'nama' => $user['name'],
+                        'alamat' => $data['alamat'] ?? null,
+                        'telepon' => $data['telepon'] ?? null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]); 
+                }
             } elseif ($user['role'] === 'siswa') {
                 $row = $db->table('siswa')->where('user_id', $id)->get()->getRowArray();
-                if ($row) { $db->table('siswa')->where('user_id',$id)->update(['nama'=>$user['name']]); }
-                else { $db->table('siswa')->insert(['user_id'=>$id,'nama'=>$user['name']]); }
+                if ($row) { 
+                    $db->table('siswa')->where('user_id',$id)->update([
+                        'nis' => $data['nis'] ?? $row['nis'],
+                        'nama' => $user['name'],
+                        'kelas' => $data['kelas'] ?? $row['kelas'],
+                        'jurusan' => $data['jurusan'] ?? $row['jurusan'],
+                        'alamat' => $data['alamat'] ?? $row['alamat'],
+                        'telepon' => $data['telepon'] ?? $row['telepon'],
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]); 
+                } else { 
+                    $db->table('siswa')->insert([
+                        'user_id' => $id,
+                        'nis' => $data['nis'] ?? null,
+                        'nama' => $user['name'],
+                        'kelas' => $data['kelas'] ?? null,
+                        'jurusan' => $data['jurusan'] ?? null,
+                        'alamat' => $data['alamat'] ?? null,
+                        'telepon' => $data['telepon'] ?? null,
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'updated_at' => date('Y-m-d H:i:s')
+                    ]); 
+                }
             }
         }
 

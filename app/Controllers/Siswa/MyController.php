@@ -17,7 +17,7 @@ class MyController extends BaseController
             // Get student data and their active internship
             $row = $db->table('magang m')
                 ->select('m.*, 
-                         u.name as siswa_nama, s.nis, s.kelas, s.jurusan,
+                         u.name as siswa_nama, u.email as siswa_email, s.nis, s.kelas, s.jurusan,
                          d.nama_perusahaan, d.alamat as dudi_alamat, d.penanggung_jawab,
                          g.nama as guru_nama, g.nip as guru_nip')
                 ->join('users u', 'u.id = m.siswa_id', 'left')
@@ -26,7 +26,7 @@ class MyController extends BaseController
                 ->join('guru g', 'g.id = m.guru_id', 'left')
                 ->where('m.siswa_id', (int)$user['id'])
                 ->whereIn('m.status', ['aktif', 'berlangsung', 'selesai', 'pending'])
-                ->where('m.deleted_at IS NULL', null, false)
+                // ->where('m.deleted_at IS NULL', null, false) // Kolom deleted_at tidak ada di tabel magang
                 ->orderBy('m.created_at', 'DESC')
                 ->get()
                 ->getRowArray();
@@ -45,6 +45,7 @@ class MyController extends BaseController
             $result = [
                 'id' => $row['id'],
                 'siswa_nama' => $row['siswa_nama'],
+                'siswa_email' => $row['siswa_email'],
                 'nis' => $row['nis'],
                 'kelas' => $row['kelas'],
                 'jurusan' => $row['jurusan'],

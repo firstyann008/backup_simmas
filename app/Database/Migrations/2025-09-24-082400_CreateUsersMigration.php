@@ -10,7 +10,7 @@ class CreateUsersMigration extends Migration
     {
         $this->forge->dropTable('users', true);
         $this->forge->addField([
-            'id' => [ 'type' => 'SERIAL', 'null' => false ],
+            'id' => [ 'type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true ],
             'name' => [ 'type' => 'VARCHAR', 'constraint' => 255 ],
             'email' => [ 'type' => 'VARCHAR', 'constraint' => 255 ],
             'email_verified_at' => [ 'type' => 'TIMESTAMP', 'null' => true ],
@@ -24,8 +24,8 @@ class CreateUsersMigration extends Migration
         $this->forge->addUniqueKey('email');
         $this->forge->createTable('users');
 
-        // Emulate enum for role
-        $this->db->simpleQuery("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin','siswa','guru','dudi'))");
+        // Emulate enum for role - MySQL 8.0+ supports CHECK constraints
+        // $this->db->simpleQuery("ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('admin','siswa','guru','dudi'))");
     }
 
     public function down()

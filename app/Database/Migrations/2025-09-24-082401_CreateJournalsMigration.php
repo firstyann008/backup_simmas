@@ -11,8 +11,10 @@ class CreateJournalsMigration extends Migration
         $this->forge->dropTable('logbook', true);
         $this->forge->addField([
             'id' => [
-                'type' => 'SERIAL',
-                'null' => false,
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+                'auto_increment' => true,
             ],
             'magang_id' => [
                 'type' => 'INT',

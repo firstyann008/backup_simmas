@@ -30,7 +30,6 @@ class DudiController extends BaseController
         $guru = $db->table('guru')->where('user_id', $user['id'])->get()->getRowArray();
         $latestSql = $db->table('magang m')
             ->select('MAX(m.id) as id, m.siswa_id, m.dudi_id')
-            ->where('m.deleted_at IS NULL', null, false)
             ->groupStart()
                 // Siswa yang dibimbing oleh guru ini (cek baik guru_id dari tabel guru maupun user_id)
                 ->where('m.guru_id', $guruId)
@@ -56,16 +55,10 @@ class DudiController extends BaseController
             $countsByDudi[$dudiId] = ($countsByDudi[$dudiId] ?? 0) + 1;
         }
 
-        // Only show DUDI that have students supervised by this guru
-        if (empty($countsByDudi)) {
-            return $this->response->setJSON([]);
-        }
-
-        // Query DUDI with student counts - only those with supervised students
+        // Show all active DUDI (like in all() method)
         $builder = $db->table('dudi d')
-            ->select('d.id, d.nama_perusahaan, d.alamat, d.telepon, d.email, d.penanggung_jawab, d.status')
-            ->where('d.status', 'aktif')
-            ->whereIn('d.id', array_keys($countsByDudi));
+            ->select('d.id, d.nama_perusahaan, d.alamat, d.telepon, d.email, d.penanggung_jawab, d.status, d.kuota')
+            ->where('d.status', 'aktif');
 
         if ($q) {
             $builder->groupStart()
@@ -79,9 +72,9 @@ class DudiController extends BaseController
 
         $rows = $builder->get()->getResultArray();
         
-        // Add student counts to each DUDI
+        // Add student counts to each DUDI (0 if no students)
         foreach ($rows as &$row) {
-            $row['jumlah_siswa'] = $countsByDudi[(int)$row['id']];
+            $row['jumlah_siswa'] = $countsByDudi[(int)$row['id']] ?? 0;
         }
 
         return $this->response->setJSON($rows);
@@ -99,7 +92,7 @@ class DudiController extends BaseController
 
         // Query ALL active DUDI for dropdown selection
         $builder = $db->table('dudi d')
-            ->select('d.id, d.nama_perusahaan, d.alamat, d.telepon, d.email, d.penanggung_jawab, d.status')
+            ->select('d.id, d.nama_perusahaan, d.alamat, d.telepon, d.email, d.penanggung_jawab, d.status, d.kuota')
             ->where('d.status', 'aktif');
 
         if ($q) {
@@ -137,7 +130,6 @@ class DudiController extends BaseController
         
         $latestSql = $db->table('magang m')
             ->select('MAX(m.id) as id, m.siswa_id')
-            ->where('m.deleted_at IS NULL', null, false)
             ->groupStart()
                 // Siswa yang dibimbing oleh guru ini (cek baik guru_id dari tabel guru maupun user_id)
                 ->where('m.guru_id', $guruId)

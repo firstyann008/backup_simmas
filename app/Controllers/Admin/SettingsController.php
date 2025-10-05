@@ -29,7 +29,7 @@ class SettingsController extends BaseController
                 'email' => 'info@smkn1surabaya.sch.id',
                 'kepala_sekolah' => 'Drs. H. Sutrisno, M.Pd.',
                 'npsn' => '20567890',
-                'logo_url' => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDA3QkZGIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TE9HTzwvdGV4dD4KPC9zdmc+',
+                'logo_url' => null,
                 'updated_at' => date('Y-m-d H:i:s')
             ];
         }
@@ -54,7 +54,7 @@ class SettingsController extends BaseController
                 'email' => 'info@smkn1surabaya.sch.id',
                 'kepala_sekolah' => 'Drs. H. Sutrisno, M.Pd.',
                 'npsn' => '20567890',
-                'logo_url' => 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMDA3QkZGIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TE9HTzwvdGV4dD4KPC9zdmc+',
+                'logo_url' => null,
                 'updated_at' => date('Y-m-d H:i:s')
             ];
         }
@@ -127,27 +127,38 @@ class SettingsController extends BaseController
         }
         
         try {
-            // Read file content and convert to base64
-            $fileContent = file_get_contents($file->getTempName());
-            $logoData = base64_encode($fileContent);
-            $mimeType = $file->getMimeType();
-            $logoUrl = 'data:' . $mimeType . ';base64,' . $logoData;
-            
-            // Save logo URL to database
-            $result = $this->settingsModel->updateSettings(['logo_url' => $logoUrl]);
-            
-            if (!$result) {
-                return $this->response->setStatusCode(500)->setJSON(['message' => 'Gagal menyimpan logo ke database']);
+            // Buat direktori uploads di public jika belum ada
+            $uploadPath = FCPATH . 'uploads/';
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
             }
+
+            // Generate nama file unik
+            $newName = 'logo_' . time() . '.' . $file->getExtension();
             
-            // Log for debugging
-            log_message('debug', 'Logo uploaded successfully, size: ' . strlen($logoData) . ' bytes');
-            
-            return $this->response->setJSON([
-                'message' => 'Logo berhasil diupload',
-                'logo_url' => $logoUrl,
-                'success' => true
-            ]);
+            // Pindahkan file
+            if ($file->move($uploadPath, $newName)) {
+                // Simpan path logo ke database
+                $logoUrl = base_url('uploads/' . $newName);
+                
+                // Save logo URL to database
+                $result = $this->settingsModel->updateSettings(['logo_url' => $logoUrl]);
+                
+                if (!$result) {
+                    return $this->response->setStatusCode(500)->setJSON(['message' => 'Gagal menyimpan logo ke database']);
+                }
+                
+                // Log for debugging
+                log_message('debug', 'Logo uploaded successfully to: ' . $logoUrl);
+                
+                return $this->response->setJSON([
+                    'message' => 'Logo berhasil diupload',
+                    'logo_url' => $logoUrl,
+                    'success' => true
+                ]);
+            } else {
+                return $this->response->setStatusCode(500)->setJSON(['message' => 'Gagal memindahkan file']);
+            }
         } catch (\Exception $e) {
             log_message('error', 'Logo upload failed: ' . $e->getMessage());
             return $this->response->setStatusCode(500)->setJSON(['message' => 'Gagal mengupload logo: ' . $e->getMessage()]);

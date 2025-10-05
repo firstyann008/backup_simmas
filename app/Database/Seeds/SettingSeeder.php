@@ -8,7 +8,7 @@ class SettingSeeder extends Seeder
 {
     public function run()
     {
-        $this->db->table('school_settings')->insert([
+        $this->db->table('settings')->insert([
             'logo_url' => null,
             'nama_sekolah' => 'SMK Negeri 1 Surabaya',
             'alamat' => 'Jl. SMEA No.4, Surabaya',

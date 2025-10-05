@@ -11,8 +11,10 @@ class CreateSettingsMigration extends Migration
         $this->forge->dropTable('school_settings', true);
         $this->forge->addField([
             'id' => [
-                'type' => 'SERIAL',
-                'null' => false,
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+                'auto_increment' => true,
             ],
             'logo_url' => [ 'type' => 'TEXT', 'null' => true ],
             'nama_sekolah' => [

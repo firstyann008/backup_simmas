@@ -120,6 +120,7 @@ class LogbookController extends BaseController
         
         $tanggal = $jsonData['tanggal'] ?? null;
         $kegiatan = $jsonData['kegiatan'] ?? null;
+        $kendala = $jsonData['kendala'] ?? null;
         
         if (empty($tanggal) || empty($kegiatan)) {
             return $this->response->setStatusCode(422)->setJSON(['message' => 'Tanggal dan kegiatan wajib diisi']);
@@ -147,6 +148,7 @@ class LogbookController extends BaseController
             'magang_id' => $magang['id'],
             'tanggal' => $tanggal,
             'kegiatan' => trim($kegiatan),
+            'kendala' => $kendala ? trim($kendala) : null,
             'status_verifikasi' => 'pending'
         ];
         
@@ -222,6 +224,7 @@ class LogbookController extends BaseController
         
         $tanggal = $jsonData['tanggal'] ?? null;
         $kegiatan = $jsonData['kegiatan'] ?? null;
+        $kendala = $jsonData['kendala'] ?? null;
         
         // Debug logging
         log_message('debug', 'LogbookController::update - Received data:');
@@ -229,6 +232,7 @@ class LogbookController extends BaseController
         log_message('debug', 'Content-Type: ' . $this->request->getHeaderLine('Content-Type'));
         log_message('debug', 'Tanggal: ' . ($tanggal ?? 'null'));
         log_message('debug', 'Kegiatan: ' . ($kegiatan ?? 'null'));
+        log_message('debug', 'Kendala: ' . ($kendala ?? 'null'));
         log_message('debug', 'All POST data: ' . json_encode($this->request->getPost()));
         log_message('debug', 'Raw input: ' . json_encode($this->request->getRawInput()));
         
@@ -243,7 +247,8 @@ class LogbookController extends BaseController
         
         $data = [
             'tanggal' => $tanggal,
-            'kegiatan' => trim($kegiatan)
+            'kegiatan' => trim($kegiatan),
+            'kendala' => $kendala ? trim($kendala) : null
         ];
         
         // Handle file upload (optional) - check if file is provided in JSON

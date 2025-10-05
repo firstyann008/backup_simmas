@@ -18,14 +18,21 @@ $routes->get('/debug/internships', 'DebugController::testInternships');
 
 // Auth endpoints
 $routes->post('api/auth/login', 'AuthController::login');
+$routes->post('api/auth/register', 'AuthController::register');
 $routes->get('api/auth/me', 'AuthController::me', ['filter' => 'jwt']);
 
 // Public school info endpoint
 $routes->get('api/school-info', 'Admin\\SettingsController::getSchoolInfo');
 
+// File download/view endpoints
+$routes->get('file/download/(:any)', 'FileController::download/$1');
+$routes->get('file/view/(:any)', 'FileController::view/$1');
+
 // Protected examples per role
 $routes->group('api/admin', ['filter' => 'jwt:admin'], static function($routes) {
     $routes->get('ping', 'Home::index');
+    $routes->get('stats', 'Admin\\StatsController::overview');
+    $routes->get('dudi/test', 'Admin\\DudiController::test');
     $routes->get('dudi', 'Admin\\DudiController::index');
     $routes->get('dudi/(:num)', 'Admin\\DudiController::show/$1');
     $routes->get('dudi/(:num)/students', 'Admin\\DudiController::students/$1');

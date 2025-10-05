@@ -8,10 +8,20 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class DudiController extends BaseController
 {
+    public function test()
+    {
+        log_message('debug', 'DUDI Test - Method called');
+        return $this->response->setJSON(['message' => 'Test method works', 'data' => ['test' => true]]);
+    }
+    
     public function index()
     {
         try {
+            log_message('debug', 'DUDI Index - Method called');
+            log_message('debug', 'DUDI Index - Request method: ' . $this->request->getMethod());
+            log_message('debug', 'DUDI Index - Request URI: ' . $this->request->getUri());
             $q = $this->request->getGet('q');
+            log_message('debug', 'DUDI Index - Query: ' . $q);
             $model = new DudiModel();
             $builder = $model->builder();
             
@@ -27,12 +37,11 @@ class DudiController extends BaseController
             
             $data = $builder->get()->getResultArray();
 
-            // Hitung jumlah siswa per DUDI berdasarkan 1 penempatan TERAKHIR per siswa - exclude soft deleted
+            // Hitung jumlah siswa per DUDI berdasarkan 1 penempatan TERAKHIR per siswa
             $db = db_connect();
             $latestRows = $db->table('magang')
                 ->select('MAX(id) as id')
                 ->groupStart()->where('status','aktif')->orWhere('status','pending')->groupEnd()
-                ->where('deleted_at IS NULL', null, false)
                 ->groupBy('siswa_id')
                 ->get()->getResultArray();
             $latestIds = array_map(static function($r){ return (int) ($r['id'] ?? 0); }, $latestRows);
@@ -49,8 +58,10 @@ class DudiController extends BaseController
 
             foreach ($data as &$dudi) {
                 $dudi['jumlah_siswa'] = $countsByDudi[(int)$dudi['id']] ?? 0;
+                $dudi['kuota'] = (int)($dudi['kuota'] ?? 0);
             }
             
+            log_message('debug', 'DUDI Index - Returning data: ' . json_encode($data));
             return $this->response->setJSON($data);
         } catch (\Exception $e) {
             log_message('error', 'DUDI index error: ' . $e->getMessage());
@@ -70,6 +81,7 @@ class DudiController extends BaseController
 
     public function create()
     {
+        log_message('debug', 'DUDI Create - Method called');
         $data = $this->request->getJSON(true) ?: $this->request->getPost();
         
         // Log the received data for debugging

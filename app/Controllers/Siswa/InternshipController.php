@@ -65,7 +65,6 @@ class InternshipController extends BaseController
             ->join('dudi d','d.id=m.dudi_id','left')
             ->where('m.siswa_id', (int)$user['id'])
             ->whereIn('m.status', ['pending','aktif'])
-            ->where('m.deleted_at IS NULL', null, false)
             ->orderBy('m.created_at','DESC')
             ->get()->getResultArray();
         return $this->response->setJSON($rows);

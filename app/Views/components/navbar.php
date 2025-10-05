@@ -6,8 +6,9 @@ $userName = $user['name'] ?? 'User';
 
 // Load school info from database
 $db = db_connect();
-$schoolInfo = $db->table('school_settings')->get()->getRowArray();
+$schoolInfo = $db->table('settings')->get()->getRowArray();
 $schoolName = $schoolInfo['nama_sekolah'] ?? 'SMK Negeri 1 Surabaya';
+$logoUrl = $schoolInfo['logo_url'] ?? null;
 
 // Debug logging
 log_message('debug', 'Navbar school name loaded: ' . $schoolName);
@@ -32,20 +33,23 @@ $avatarColor = match($userRole) {
 ?>
 
 <!-- Navbar Component -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm border-bottom">
-  <div class="container-fluid" style="padding: 0.5rem 1.5rem; height: 70px; display: flex; align-items: center;">
+<nav class="navbar navbar-expand-lg shadow-sm border-bottom" style="background: var(--bg-surface); margin-bottom: 0;">
+  <div class="container-fluid" style="padding: 0.25rem 1.0rem; height: 64px; display: flex; align-items: center; justify-content: space-between;">
     <!-- Left Side: Toggle Button and School Info -->
     <div class="d-flex align-items-center">
       <!-- Sidebar Toggle Button -->
-      <button class="btn btn-link text-dark me-3" type="button" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+      <button class="btn btn-link me-3" type="button" onclick="toggleSidebar()" aria-label="Toggle sidebar" style="color: var(--text-primary);">
         <i class="fas fa-bars fs-5"></i>
       </button>
       
       <!-- School Name -->
-      <div class="d-flex align-items-center me-4">
-        <div>
-          <h4 class="mb-0 fw-bold text-dark"><?= $schoolName ?></h4>
-          <small class="text-muted"><?= $appName ?></small>
+      <div class="d-flex align-items-center me-4" style="min-width:0;">
+        <?php if (!empty($logoUrl)): ?>
+          <img src="<?= esc($logoUrl) ?>" alt="Logo" class="me-2" style="width:36px;height:36px;object-fit:contain;border-radius:8px;background:#fff;">
+        <?php endif; ?>
+        <div class="d-flex flex-column justify-content-center" style="line-height:1.1;">
+          <h5 class="mb-0 fw-bold" style="color: var(--text-primary);"><?= esc($schoolName) ?></h5>
+          <small style="color: var(--text-secondary);"><?= $appName ?></small>
         </div>
       </div>
       
@@ -55,19 +59,19 @@ $avatarColor = match($userRole) {
     <div class="d-flex align-items-center">
       <!-- User Avatar with Dropdown -->
       <div class="dropdown">
-        <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center" type="button" id="userDropdown" aria-expanded="false">
+        <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center" type="button" id="userDropdown" aria-expanded="false" style="color: var(--text-primary);">
           <div class="d-flex align-items-center">
             <!-- Avatar -->
-            <div class="rounded-circle d-flex align-items-center justify-content-center me-3 <?= $avatarColor ?>" style="width: 40px; height: 40px;">
-              <i class="fas fa-user text-white"></i>
+            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: var(--brand-600);">
+              <i class="fas fa-user" style="color:#fff;"></i>
             </div>
             <!-- User Info -->
             <div class="text-start d-none d-md-block">
-              <div class="fw-semibold text-dark" id="navbar-user-name"><?= $userName ?></div>
-              <small class="text-muted text-capitalize" id="navbar-user-role"><?= $userRole ?></small>
+              <div class="fw-semibold" id="navbar-user-name" style="color: var(--text-primary);"><?= $userName ?></div>
+              <small class="text-capitalize" id="navbar-user-role" style="color: var(--text-secondary);"><?= $userRole ?></small>
             </div>
             <!-- Dropdown Arrow -->
-            <i class="fas fa-chevron-down ms-2 text-muted"></i>
+            <i class="fas fa-chevron-down ms-2" style="color: var(--text-secondary);"></i>
           </div>
         </button>
         
@@ -75,12 +79,14 @@ $avatarColor = match($userRole) {
         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="min-width: 200px;">
           <li class="px-3 py-2 border-bottom">
             <div class="d-flex align-items-center">
-              <div class="rounded-circle d-flex align-items-center justify-content-center me-2 <?= $avatarColor ?>" style="width: 32px; height: 32px;">
-                <i class="fas fa-user text-white small"></i>
+              <div class="rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; background: var(--brand-600);">
+                <i class="fas fa-user small" style="color:#fff;"></i>
               </div>
               <div>
                 <div class="fw-semibold" id="dropdown-user-name"><?= $userName ?></div>
-                <small class="text-muted text-capitalize" id="dropdown-user-role"><?= $userRole ?></small>
+                <small class="text-capitalize" id="dropdown-user-role" style="color: var(--text-secondary);">
+                  <?= $userRole ?>
+                </small>
               </div>
             </div>
           </li>

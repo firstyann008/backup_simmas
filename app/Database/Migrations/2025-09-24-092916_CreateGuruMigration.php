@@ -10,7 +10,7 @@ class CreateGuruMigration extends Migration
     {
         $this->forge->dropTable('guru', true);
         $this->forge->addField([
-            'id' => ['type' => 'SERIAL', 'null' => false],
+            'id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'user_id' => ['type' => 'INT', 'null' => false],
             'nip' => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'nama' => ['type' => 'VARCHAR', 'constraint' => 255],
